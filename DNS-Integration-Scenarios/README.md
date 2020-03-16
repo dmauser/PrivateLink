@@ -75,9 +75,9 @@ Name resolution sequence after Storage Account gbbstg1 get Private Endpoint enab
 | 2 | gbbstg1. **privatelink.blob.core.windows.net** | CNAME | blob.sn1prdstr01a.store.core.windows.net |
 | 3 | blob.sn1prdstr01a.store.core.windows.net | HOST (A) | 20.38.104.164 |
 
-However, there is a slight difference compared with the previous scenario that without Private Endpoint integration. When Private Endpoint is enabled, notice that Private Endpoint added an additional CNAME for the service: &quot; **gbbstg1.**** privatelink ****.blob.core.windows.net&quot;.**
+However, there is a slight difference compared with the previous scenario that without Private Endpoint integration. When Private Endpoint is enabled, notice that Private Endpoint added an additional CNAME for the service: &quot; gbbstg1.privatelink.blob.core.windows.net&quot;.
 
-A critical element for this scenario is to ensure the original name gbbstg1.blob.core.windows.net resolves to a customer&#39;s internal Private Endpoint IP for internal users, or the Public IP for external users if required. Therefore, when internal clients submit queries to internal DNS that is hosting **privatelink****.blob.core.windows.net** they will be able to get internal IP. However, when external clients try to resolve the same name, the first redirect of privatelink domain will not be hosted in any external DNS Server, and it will make it fall back to the external CNAME blob.sn1prdstr01a.store.core.windows.net and finally get its public IP.
+A critical element for this scenario is to ensure the original name gbbstg1.blob.core.windows.net resolves to a customer&#39;s internal Private Endpoint IP for internal users, or the Public IP for external users if required. Therefore, when internal clients submit queries to internal DNS that is hosting **privatelink.blob.core.windows.net** they will be able to get internal IP. However, when external clients try to resolve the same name, the first redirect of privatelink domain will not be hosted in any external DNS Server, and it will make it fall back to the external CNAME blob.sn1prdstr01a.store.core.windows.net and finally get its public IP.
 
 Here is the sequence when an internal DNS resolution happens considering **privatelink.blob.core.windows.net** zone has been properly configured with its respective HOST (A) records for Private Endpoint IP addresses:
 
