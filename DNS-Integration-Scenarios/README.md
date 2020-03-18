@@ -4,7 +4,9 @@ Private Endpoint DNS Integration Scenarios
 Table of Contents
 =================
 
-1. [Introduction](##1.-introduction)
+[TOC]
+
+1. [Introduction](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#1-introduction)
 
 2. [How DNS resolution works before and after Private Endpoints
 ](#2.-how-dns-resolution-works-before-and-after-private-endpoints)
