@@ -330,7 +330,7 @@ Here is a sample for network capture that show a Client (10.0.0.11) sending a re
 Here are few steps to resolve DNS issues when integrating private endpoint with Azure Private DNS:
 
 1. Validate Private Endpoint has proper DNS record on Private DNS Zone. In case Private Endpoint was deleted and recreated a new IP may exist or duplicated records which will cause clients to use round-robin and make connectivity instable.
-2. Validate if DNS settings of the VM has Correct DNS Servers.
+2. Validate if DNS settings of the Azure VM has Correct DNS Servers.
   
     a) DNS settings can be defined VNET level and NIC Level.
       
@@ -345,9 +345,10 @@ Here are few steps to resolve DNS issues when integrating private endpoint with 
 
 4. Custom DNS has:
 
-    a) DNS has Root Hits only – In this case is the best to have a forwarder configured to 168.63.129.16 which will improve performance and doesn't require any extra conditional forwarding setting.
+    a) **DNS has Root Hits only** – In this case is the best to have a forwarder configured to 168.63.129.16 which will improve performance and doesn't require any extra conditional forwarding setting.
 
-    b) DNS Forwarders to another DNS Server (not Azure Provided DNS) – In this case you need to create a conditional forwarder to original PaaS domain zone (i.e. Storage you should configure blob.core.windows.net conditional forwarder to 168.63.129.16). Keep in mind using that approach will make all DNS requests to storage account with or without private endpoint to be resolved by Azure Provided DNS. By having multiple Custom DNS Serves in Azure will help to get better high availability for requests coming from On-Prem.
+    b) **DNS Forwarders to another DNS Server (not Azure Provided DNS)** – In this case you need to create a conditional forwarder to original PaaS domain zone (i.e. Storage you should configure blob.core.windows.net conditional forwarder to 168.63.129.16). Keep in mind using that approach will make all DNS requests to storage account with or without private endpoint to be resolved by Azure Provided DNS. By having multiple Custom DNS Serves in Azure will help to get better high availability for requests coming from On-Prem.
 
-5. When executing tools like _DIG_ (Linux), _nslookup_ (Windows and Linux) or _Resolve-DnsName_ (Powershell) account for local operational system DNS cache after a DNS server configuration has been changed. On Windows you can flush local cache by running **ipconfig/flusdns**. Another alternative when using commands like Resolve-DnsName you can use -DNSonly to bypass local cache, for example:
-Resolve-DnsName -Name gbbstg1.blob.core.windows.net -DnsOnly
+5. When executing tools like _DIG_ (Linux), _nslookup_ (Windows and Linux) or _Resolve-DnsName_ (Powershell) account for local operational system DNS cache after a DNS server configuration has been changed. On Windows you can flush local cache by running **ipconfig /flushdns**. Another alternative when using commands like Resolve-DnsName you can use -DNSonly to bypass local cache, for example:
+
+**Resolve-DnsName -Name gbbstg1.blob.core.windows.net -DnsOnly**
