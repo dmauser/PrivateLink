@@ -34,8 +34,10 @@ You can validate that by either running Nslookup, Resolve-DnsName (PowerShell) o
 
 ## Recommended Solution: 
 
-Expose  contosostg1 storage account via Private Link/Endpoint to Fabrikam.
+Expose **contosostg1** storage account via Private Link/Endpoint to Fabrikam.
 Fabrikam has to create a Private Endpoint and request Private Link to contosostg1.blob.core.windows.net. After that DNS record for contosostg1 inside AzurePrivate DNS zone privatelink.blob.core.windows.net in order to access.
+
+ **Note**: We may have other solutions that will be added later in this document.
 
 In order to create PrivateEndpoint on Fabrikam side Contoso has to provide them Storage Account contosostg1 ResourceID. In my example:
 /subscriptions/SubscriptionID/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
