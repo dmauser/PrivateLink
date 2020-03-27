@@ -38,7 +38,7 @@ Expose  contosostg1 storage account via Private Link/Endpoint to Fabrikam.
 Fabrikam has to create a Private Endpoint and request Private Link to contosostg1.blob.core.windows.net. After that DNS record for contosostg1 inside AzurePrivate DNS zone privatelink.blob.core.windows.net in order to access.
 
 In order to create PrivateEndpoint on Fabrikam side Contoso has to provide them Storage Account contosostg1 ResourceID. In my example:
-/subscriptions/36ead89c-e817-4abc-ae66-5d29d23995bb/resourceGroups/VNET1/providers/Microsoft.Storage/storageAccounts/contosostg1
+/subscriptions/SubscriptionIDID/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
 
 ### 1. Using that information Fabrikam start the process to create a Private Endpoint on their side using Azure Portal ###
 (Screenshots in sequence - Basics, Resource, Configuration, Review+Create):
