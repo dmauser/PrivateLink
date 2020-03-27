@@ -246,8 +246,6 @@ The final key scenario to consider is how can an On-Premises DNS server can be p
   - Higher administrative overhead to create and manage individual FQDN zones which can increase complexity based on how DNS works.
   - Scalability issues when large amount of DNS Servers is present. It can be resolved by one of these options: Zone replication (Active Directory), script automation, DNS Zone Transfer and others. 
 
-
-
 ## 5. Architecture Design Example
 
 Here is sample design on how to integrate OnPrem DNS as well as Azure DNS resolution to PaaS Services and obtain Private Endpoint IP.
