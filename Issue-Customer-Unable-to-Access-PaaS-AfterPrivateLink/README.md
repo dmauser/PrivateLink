@@ -14,7 +14,7 @@ Contoso wants allow Fabrikam to access their container named orders under storag
 
 Contoso expects Fabrikam to access their storage account using Public IP. However, when Fabrikam IT team tries to resolve contosostg1.blob.core.windows.net from FabrikamVM1 they detect that resolution does not work at all as shown:
 
-![](./media/image1.png)
+![](./Media/image1.png)
 
 1. Unable to ping contosostg1.blob.core.windows.net (name resolution failed to obtain IP)
 2. Nslookup doesn't show error but no IP is resolved.
@@ -38,7 +38,7 @@ Expose  contosostg1 storage account via Private Link/Endpoint to Fabrikam.
 Fabrikam has to create a Private Endpoint and request Private Link to contosostg1.blob.core.windows.net. After that DNS record for contosostg1 inside AzurePrivate DNS zone privatelink.blob.core.windows.net in order to access.
 
 In order to create PrivateEndpoint on Fabrikam side Contoso has to provide them Storage Account contosostg1 ResourceID. In my example:
-/subscriptions/SubscriptionIDID/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
+/subscriptions/SubscriptionID/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
 
 ### 1. Using that information Fabrikam start the process to create a Private Endpoint on their side using Azure Portal ###
 (Screenshots in sequence - Basics, Resource, Configuration, Review+Create):
