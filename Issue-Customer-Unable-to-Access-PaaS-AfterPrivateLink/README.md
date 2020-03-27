@@ -14,7 +14,7 @@ Contoso wants allow Fabrikam to access their container named orders under storag
 
 Contoso expects Fabrikam to access their storage account using Public IP. However, when Fabrikam IT team tries to resolve contosostg1.blob.core.windows.net from FabrikamVM1 they detect that resolution does not work at all as shown:
 
-![](./Media/image1.png)
+![](./media/image1.png)
 
 1. Unable to ping contosostg1.blob.core.windows.net (name resolution failed to obtain IP)
 2. Nslookup doesn't show error but no IP is resolved.
