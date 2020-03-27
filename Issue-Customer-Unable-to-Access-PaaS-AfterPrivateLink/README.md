@@ -1,18 +1,18 @@
 ## Known Issue
 Azure Customers are unable to access each other PaaS Resources when both sides are exposed to PrivateLink/Endpoint.
 
-## Consider a scenario:
-Contoso Corporation is using Private Endpoint to access their Storage Accounts, example blog storage account name: **contosostg1**.
- - ContosoVM1 -> Resolves Storage Account using privatelink.blob.core.windows.net to get private IP associated to Private Endpoint in order to access contosostg1.blob.core.windows.net
+## Scenario:
+Consider a scenario where Contoso Corporation is using Private Endpoint to access their Storage Accounts, example blog storage account name: **contosostg1**.
+ - **ContosoVM1** -> Resolves Storage Account using privatelink.blob.core.windows.net to get private IP associated to Private Endpoint in order to access **contosostg1.blob.core.windows.net**.
 
-In the other side Fabrikam is also using Private Endpoints to access their own Storage Accounts, for example fabriakamstg1, using same exact scenario as Contoso.
- - FabrikamVM1 -> Resolves Storage Account using privatelink.blob.core.windows.net to get private IP associated to Private Endpoint in order to access fabrikamstg1.blob.core.windows.net
+In the other side Fabrikam is also using Private Endpoints to access their own Storage Accounts, for example **fabriakamstg1**, using same exact scenario as Contoso.
+ - **FabrikamVM1** -> Resolves Storage Account using privatelink.blob.core.windows.net to get private IP associated to Private Endpoint in order to access **fabrikamstg1.blob.core.windows.net**.
 
-For this scenario both customers host their respective privatelink.blob.core.windows.net using Azure Private DNS Zones.
+For this scenario both customers host their respective **privatelink.blob.core.windows.net** zone using Azure Private DNS.
 
-Contoso wants allow Fabrikam to access their container named orders under storage account contosostg1.blob.core.windows.net
+Contoso wants allow Fabrikam to access their container named orders under storage account **contosostg1.blob.core.windows.net**.
 
-Contoso expects Fabrikam to access their storage account using Public IP. However, when Fabrikam IT team tries to resolve contosostg1.blob.core.windows.net from FabrikamVM1 they detect that resolution does not work at all as shown:
+Contoso expects Fabrikam to access their storage account using Public IP. However, when Fabrikam IT team tries to resolve **contosostg1.blob.core.windows.net** from FabrikamVM1 they detect that resolution does not work at all as shown:
 
 ![](./Media/image1.png)
 
