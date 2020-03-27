@@ -14,7 +14,7 @@ Contoso wants allow Fabrikam to access their container named orders under storag
 
 Contoso expects Fabrikam to access their storage account using Public IP. However, when Fabrikam IT team tries to resolve contosostg1.blob.core.windows.net from FabrikamVM1 they detect that resolution does not work at all as shown:
 
-![](./media/image1.png)
+![](./Media/image1.png)
 
 1. Unable to ping contosostg1.blob.core.windows.net (name resolution failed to obtain IP)
 2. Nslookup doesn't show error but no IP is resolved.
@@ -27,7 +27,7 @@ Note that If you execute the same tests outside of Fabrikam environment (not int
     
 You can validate that by either running Nslookup, Resolve-DnsName (PowerShell) or Dig against contosostg1.blob.core.windows.net as shown:
 
-![](./media/image2.png)
+![](./Media/image2.png)
 
 1. Public IP is returned fine.
 2. You can confirm with this extra CNAME contosostg1.privatelink.blob.core.windows.net that storage account is exposed to Private Link/Endpoint (For more information on how DNS Name resolution works with PrivateLink here: [How DNS resolution works before and after Private Endpoints](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#2-how-dns-resolution-works-before-and-after-private-endpoints)
@@ -45,23 +45,23 @@ In order to create PrivateEndpoint on Fabrikam side Contoso has to provide them 
 
 - **Step 1** - Add Private Private Endpoint
 
-![](./media/image3.png)
+![](./Media/image3.png)
 
 - **Step 2** - Select Subscription, Resource Group, Private Endpoint Name and Region.
 
-![](./media/image4.png)
+![](./Media/image4.png)
 
 - **Step 3** - On resource tab you have to add Storage Account Resource ID provided by Constoso. Example: /subscriptions/(Add **SubID**)/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
 
-![](./media/image5.png)
+![](./Media/image5.png)
 
 - **Step 4** - Add target Virtual Network where Private Endpoint will reside. **Note** At this point Private DNS is not configured. You will to add record manually after you get Private Link request approved by Contoso.
 
-![](./media/image6.png)
+![](./Media/image6.png)
 
 - **Step 5** - Review all details and process by Create.
 
-![](./media/image7.png)
+![](./Media/image7.png)
 
 ### 2. After Private Endpoint get Created you will see:
 
@@ -69,8 +69,8 @@ In order to create PrivateEndpoint on Fabrikam side Contoso has to provide them 
  2. Connection Status as Pending because Contoso still need to approve Private Endpoint Request from Fabrikam
  3. DNS full name will be shown only after Contoso approval
 
-![](./media/ContosoPep-Pending.png)
+![](./Media/ContosoPep-Pending.png)
 
 ### 3. Contoso now has to approve that request that came from Fabrikam. Steps below done over Azure Portal on Contoso side.
 
-![](./media/image8.png)
+![](./Media/image8.png)
