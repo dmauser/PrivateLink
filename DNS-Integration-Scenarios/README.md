@@ -178,11 +178,6 @@ Another custom DNS scenario to consider is when a Forwarder or Root hints have a
   
   ![](./media/image12.png)
 
-**Note:** For additional redundancy, you can configure Azure Provided DNS (168.63.129.16) as a 3rd DNS server if both Custom DNS servers go down, that configuration is shown below:
-
-![](./media/image14.png)
-
-
 ## 4. On-Premises DNS integration
 
 The first challenge when trying to resolve Private Endpoints from On-premises networks, when leveraging Azure Private DNS Zones, is how to retrieve the Private Endpoint IP via 168.63.129.16 (this IP is not reachable from On-premises networks). Today this integration requires use of a Custom DNS Servers deployed in Azure VNET and have On-premises DNS Servers send requests to them. It's important that On-premises DNS Servers are configured correctly to forward the appropriate requests to the Custom DNS server in Azure and there are multiple ways to do that and we will explore them in more details later in this section.
