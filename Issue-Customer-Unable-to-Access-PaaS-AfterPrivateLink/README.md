@@ -43,7 +43,7 @@ You can validate that by either running **Nslookup**, **Resolve-DnsName** (Power
 
 There are two potential solutions for this issue:
 
-1) Create a conditional forwarder for DNS name (FQDN) contosostg1.blob.core.windows.net and point to an Internet resolver.
+1) Create a conditional forwarder for DNS name (FQDN) contosostg1.blob.core.windows.net and point to an Internet DNS resolver.
 
 2) (**Recommended**) Expose **contosostg1** storage account via Private Link/Endpoint to Fabrikam be able to access it. More details can be found here: [Solution 2 - Expose Storage Account Cross-Tenant/Cross-Subscrition](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink#recommended-solution)
 
