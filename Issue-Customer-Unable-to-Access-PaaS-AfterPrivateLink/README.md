@@ -21,7 +21,7 @@ On this second scenario, Fabrikam has been accessing Contoso's storage account o
 
 Contoso expects Fabrikam to access their storage account using Public IP. However, when Fabrikam IT team tries to resolve **contosostg1.blob.core.windows.net** from FabrikamVM1 they detect that resolution does not work at all as shown:
 
-![](./media/image1.png)
+![](./Media/image1.png)
 
 1. Unable to ping **contosostg1.blob.core.windows.net** (name resolution failed to obtain IP).
 2. Nslookup doesn't show error but no IP is resolved.
@@ -34,7 +34,7 @@ Note that If you execute the same tests outside of Fabrikam environment (not int
 
 You can validate that by either running **Nslookup**, **Resolve-DnsName** (PowerShell) or **Dig** against contosostg1.blob.core.windows.net as shown:
 
-![](./media/image2.png)
+![](./Media/image2.png)
 
 1. Public IP is returned fine.
 2. You can confirm with this extra CNAME contosostg1.privatelink.blob.core.windows.net that storage account is exposed to Private Link/Endpoint (For more information on how DNS Name resolution works with PrivateLink here: [How DNS resolution works before and after Private Endpoints](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#2-how-dns-resolution-works-before-and-after-private-endpoints) ).
@@ -55,13 +55,13 @@ This solution requires a DNS Server that may sit on same Virtual Network or diff
 
 Here is an example on Custom DNS Server using a conditional forwarder to storage account **contosostg1.blob.core.windows.net** (Note: full storage account FQDN name):
 
-![](./media/dns-storage-forwarder.png)
+![](./Media/dns-storage-forwarder.png)
 
 **Note:** It is important also not to make an authoritative zone (Primary Zone) for that storage FQDN (i.e. **contosostg1.blob.core.windows.net**) and manually add Public IP host record because Storage Account IP may change without any notification. Same applies for attempts to add it as entry on OS hosts file. Therefore, a conditional forwarder to an external resolver is the best choice to make.
 
 After you implement woraround above all requests to **contosostg1.blob.core.windows.net** will be redirected to specified external Internet DNS resolvers and Public IP will be returned properly, example:
 
-![](./media/nslookup.png)
+![](./Media/nslookup.png)
 
 ## Solution 2 - Expose Storage Account via Private Link/Endpoint (Cross-Tenant/Cross-Subscription)
 
@@ -77,23 +77,23 @@ In order to create PrivateEndpoint on Fabrikam side. They have to request Contos
 
 - **Step 1** - Add Private Private Endpoint
 
-![](./media/image3.png)
+![](./Media/image3.png)
 
 - **Step 2** - Select Subscription, Resource Group, Private Endpoint Name and Region.
 
-![](./media/image4.png)
+![](./Media/image4.png)
 
 - **Step 3** - On resource tab you have to add Storage Account Resource ID provided by Constoso. Example: /subscriptions/(Add **SubID**)/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
 
-![](./media/image5.png)
+![](./Media/image5.png)
 
 - **Step 4** - Add target Virtual Network where Private Endpoint will reside. **Note** At this point Private DNS is not configured. You will to add record manually after you get Private Link request approved by Contoso.
 
-![](./media/image6.png)
+![](./Media/image6.png)
 
 - **Step 5** - Review all details and process by Create.
 
-![](./media/image7.png)
+![](./Media/image7.png)
 
 ### 2. After Private Endpoint get Created you will see:
 
@@ -101,49 +101,49 @@ In order to create PrivateEndpoint on Fabrikam side. They have to request Contos
  2. Connection Status as Pending because Contoso still need to approve Private Endpoint Request from Fabrikam
  3. DNS full name will be shown only after Contoso approval
 
-![](./media/ContosoPep-Pending.png)
+![](./Media/ContosoPep-Pending.png)
 
 ### 3. Contoso now has to approve that request that came from Fabrikam. Steps below done over Azure Portal on Contoso side.
 
-![](./media/image8.png)
+![](./Media/image8.png)
 
 ### 4. Storage Account on Contoso side now shows two Private Endpoint connected. First to local Subscription (Auto-Approved). Second is the one created mapping Private Endpoint on Fabrikam Subscription.
 
-![](./media/image9.png)
+![](./Media/image9.png)
 
 ### 5. On Fabrikam side lets review the Private Endpoint Status:
 
-![](./media/image10.png)
+![](./Media/image10.png)
 
 ### 6. An extra step needed here is to add record contosostg1 on Azure Private DNS Zone.
 
-![](./media/image11.png)
+![](./Media/image11.png)
 
 ## Validation on FabrikamVM1 side:
 
 ### 1. Name Resolution:
 
-![](./media/image12.png)
+![](./Media/image12.png)
 
 ### 2. Accessing Storage Acccount (Obtaining SAS access from Contoso).
 
 2.1 - Generating SAS URL for Blob Storage.
-![](./media/image13.png)
+![](./Media/image13.png)
 
 2.2 - Contoso sends to Fabrikam link with SAS URI.
 
-![](./media/image14.png)
+![](./Media/image14.png)
 
 ### 3. Fabrikan (logged on FabrikamVM) access Storage Account **contosostg1** via Azure Storage Explorer.
 
 3.1 - Initiates connection with provided SAS URI:
 
-![](./media/image15.png)
+![](./Media/image15.png)
 
 3.2 - Access to Storage Account worked as expected:
 
-![](./media/image16.png)
+![](./Media/image16.png)
 
 3.2 - Checked Local Connections via **netstat** to ensure FabriamVM1 is accessing storage account over PrivateEndpoint:
 
-![](./media/image17.png)
+![](./Media/image17.png)
