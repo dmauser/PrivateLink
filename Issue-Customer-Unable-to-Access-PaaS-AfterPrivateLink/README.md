@@ -67,12 +67,11 @@ After you implement woraround above all requests to **contosostg1.blob.core.wind
 
 Fabrikam has to create a Private Endpoint and request Private Link to contosostg1.blob.core.windows.net. After that DNS A (HOST) record for **contosostg1** inside AzurePrivate DNS zone privatelink.blob.core.windows.net hosted by Fabrikam in order to access it properly.
 
- **Note**: We may have other solutions such as adding a conditional forward to  **contosostg1.blob.core.windows.net** to get Public IP resolved but that will be added later in this document.
-
 In order to create PrivateEndpoint on Fabrikam side. They have to request Contoso storage account contosostg1 ResourceID. In my using in this document it will be:
     /subscriptions/SubscriptionID/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
 
-### 1. Using that information Fabrikam start the process to create a Private Endpoint on their side using Azure Portal ###
+### 1. Using that information Fabrikam start the process to create a Private Endpoint on their side using Azure Portal
+
 (Screenshots in sequence - Basics, Resource, Configuration, Review+Create):
 
 - **Step 1** - Add Private Private Endpoint
