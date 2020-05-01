@@ -57,6 +57,8 @@ Here is an example on Custom DNS Server using a conditional forwarder to storage
 
 ![](./Media/dns-storage-forwarder.png)
 
+**Update (5/01/2020)**: there is another alternative to make that change directly on the client side by leveraging NRPT feature on Windows or dnsmasq on Linux. There's an illustration of this scenario here: [Scenario 2: Conditional Forwarder exceptions](https://github.com/dmauser/PrivateLink/tree/master/DNS-Client-Configuration-Options#scenario-2-conditional-forwarder-exceptions)
+
 **Note:** It is important also not to make an authoritative zone (Primary Zone) for that storage FQDN (i.e. **contosostg1.blob.core.windows.net**) and manually add Public IP host record because Storage Account IP may change without any notification. Same applies for attempts to add it as entry on OS hosts file. Therefore, a conditional forwarder to an external resolver is the best choice to make.
 
 After you implement woraround above all requests to **contosostg1.blob.core.windows.net** will be redirected to specified external Internet DNS resolvers and Public IP will be returned properly, example:
