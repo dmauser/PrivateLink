@@ -1,4 +1,5 @@
 # PrivateLink
+
 Content and Labs related to Azure Private Link/Endpoint
 
 - [Private Endpoint DNS Integration Scenarios](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios).

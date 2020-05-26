@@ -45,7 +45,7 @@ There are two potential solutions for this issue:
 
 1) Create a conditional forwarder for DNS name (FQDN) contosostg1.blob.core.windows.net and point to an Internet DNS resolver.
 
-2) (**Recommended**) Expose **contosostg1** storage account via Private Link/Endpoint to Fabrikam be able to access it. More details can be found here: [Solution 2 - Expose Storage Account Cross-Tenant/Cross-Subscrition](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink#recommended-solution)
+2) (**Recommended**) Expose **contosostg1** storage account via Private Link/Endpoint to Fabrikam be able to access it. More details can be found here: [Solution 2 - Expose Storage Account Cross-Tenant/Cross-Subscription](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink#recommended-solution)
 
 **Note** You can use (1) as short term solution and (2) as final solution because last one depends on effort of both parties (Fabrikam and Contoso) to make configuration to work properly.
  
@@ -84,7 +84,7 @@ In order to create PrivateEndpoint on Fabrikam side. They have to request Contos
 
 ![](./Media/image4.png)
 
-- **Step 3** - On resource tab you have to add Storage Account Resource ID provided by Constoso. Example: /subscriptions/(Add **SubID**)/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
+- **Step 3** - On resource tab you have to add Storage Account Resource ID provided by Contoso. Example: /subscriptions/(Add **SubID**)/resourceGroups/RGTEST/providers/Microsoft.Storage/storageAccounts/contosostg1
 
 ![](./Media/image5.png)
 
@@ -108,25 +108,25 @@ In order to create PrivateEndpoint on Fabrikam side. They have to request Contos
 
 ![](./Media/image8.png)
 
-### 4. Storage Account on Contoso side now shows two Private Endpoint connected. First to local Subscription (Auto-Approved). Second is the one created mapping Private Endpoint on Fabrikam Subscription.
+### 4. Storage Account on Contoso side now shows two Private Endpoint connected. First to local Subscription (Auto-Approved). Second is the one created mapping Private Endpoint on Fabrikam Subscription
 
 ![](./Media/image9.png)
 
-### 5. On Fabrikam side lets review the Private Endpoint Status:
+### 5. On Fabrikam side lets review the Private Endpoint Status
 
 ![](./Media/image10.png)
 
-### 6. An extra step needed here is to add record contosostg1 on Azure Private DNS Zone.
+### 6. An extra step needed here is to add record contosostg1 on Azure Private DNS Zone
 
 ![](./Media/image11.png)
 
-## Validation on FabrikamVM1 side:
+## Validation on FabrikamVM1 side
 
-### 1. Name Resolution:
+### 1. Name Resolution
 
 ![](./Media/image12.png)
 
-### 2. Accessing Storage Acccount (Obtaining SAS access from Contoso).
+### 2. Accessing Storage Acccount (Obtaining SAS access from Contoso)
 
 2.1 - Generating SAS URL for Blob Storage.
 ![](./Media/image13.png)
@@ -135,7 +135,7 @@ In order to create PrivateEndpoint on Fabrikam side. They have to request Contos
 
 ![](./Media/image14.png)
 
-### 3. Fabrikan (logged on FabrikamVM) access Storage Account **contosostg1** via Azure Storage Explorer.
+### 3. Fabrikan (logged on FabrikamVM) access Storage Account **contosostg1** via Azure Storage Explorer
 
 3.1 - Initiates connection with provided SAS URI:
 

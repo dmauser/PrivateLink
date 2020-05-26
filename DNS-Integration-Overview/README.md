@@ -12,19 +12,20 @@ The main function of DNS name resolution is to translate names in IP addresses f
 
 Examples:
 1) Azure Storage Account name gbbstg1 for blob will get the following result:
+
 nslookup gbbstg1.blob.core.windows.net
 
 2) Azure SQL Database named sql123 will get the following result:
 nslookup sql123.database.windows.net
 
-Therefore, the main goal when you expose a Azure resource (either PaaS or your own Service) via PrivateLink is to get the same exact target name but in this case resolved to private IP address. For the examples above, when they are exposed via Private Link and internal clients (either on Azure Private Networ or On-Premises) they will resolve PaaS name and get its private IP address.
+Therefore, the main goal when you expose a Azure resource (either PaaS or your own Service) via PrivateLink is to get the same exact target name but in this case resolved to private IP address. For the examples above, when they are exposed via Private Link and internal clients (either on Azure Private Network or On-Premises) they will resolve PaaS name and get its private IP address.
 
 Examples:
 1) Internal Name resolution with Private Linkd
 
 ## 3. Azure Virtual Network DNS integration
 
-Azure Private DNS is the best solution to integrate Private Link/Endpoint to be consumed properly. That allows customers to expand Private Endpoint get resolved properly in a global way. Azure Private DNS is global resource and allows Virtual Networks of any region to be linked to it (up to 1000 Virtual Networks can be linked). That will allow any Azure resources such as Azure Virtual Machines to proper resolve the private IP of exposed PaaS resousource over Private Link/Endpoint.
+Azure Private DNS is the best solution to integrate Private Link/Endpoint to be consumed properly. That allows customers to expand Private Endpoint get resolved properly in a global way. Azure Private DNS is global resource and allows Virtual Networks of any region to be linked to it (up to 1000 Virtual Networks can be linked). That will allow any Azure resources such as Azure Virtual Machines to proper resolve the private IP of exposed PaaS resource over Private Link/Endpoint.
 
 Customers who are levering Azure Provided DNS server (168.63.129.16) on their Virtual Network will be able to resolve all Private Endpoint resources without any extra configuration needed.
 
@@ -34,5 +35,5 @@ There are other scenarios such as using Custom DNS Server and how they are confi
 
 
 
-## 5. Putting all toghether Azure VNET and On-Premises 
+## 5. Putting all together Azure VNET and On-Premises 
 
