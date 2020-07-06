@@ -166,7 +166,7 @@ It shows query from OnPremLXVM1 going directly to Azure Custom DNS Servers.
 
 ### Other Possibilities
 
-The intention of this article was to illustrate DNS client configuration options when dealing dealing with Private Endpoints. There are other potential possiiblities not enumerated here yet. Therefore, stay tuned for other potential scenarios.  
+The intention of this article was to illustrate DNS client configuration options when dealing dealing with Private Endpoints. There are other potential possibilities not enumerated here yet. Therefore, stay tuned for other potential scenarios.  
 
 [image1]: ./media/image1.png
 [image2]: ./media/image2.png
