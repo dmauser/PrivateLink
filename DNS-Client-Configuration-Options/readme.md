@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The main goal of this article is to explore few specific scenarios and alternative DNS configuration options on the client side. If you are implementing Private Link/Endpoint you can leverage options listed here as alternative to make DNS client behavior changes based on your specific needs. The intention here is to illustrate two scenarios, but you can leverage them for others too depending on your situation. Most of the exemples are related to specifically Private Endpoint (Consumers side) where private IP is allocated, and name resolution plays a critical role to make it to work properly.
+The main goal of this article is to explore few specific scenarios and alternative DNS configuration options on the client side. If you are implementing Private Link/Endpoint you can leverage options listed here as alternative to make DNS client behavior changes based on your specific needs. The intention here is to illustrate two scenarios, but you can leverage them for others too depending on your situation. Most of the examples are related to specifically Private Endpoint (Consumers side) where private IP is allocated, and name resolution plays a critical role to make it to work properly.
 
 **Note:** It is important primarily to follow guidelines on [Private Endpoint DNS Integration Scenarios](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios). The intention of this document is to illustrate other customized options for specific scenarios and should be not use as primary guidance.
 
@@ -17,7 +17,7 @@ On Linux this can be leveraged using **dnsmasq** by adding rules conditional for
 
 ## Scenario 1: On-Prem - Client direct resolve to Azure Custom DNS
 
-In case you need only few computer in your network On-Prem network to be able to resolve Private Link private IP, you can have a local conditional forwarder on each computer to resolve Private Link records in Azure Private DNZ via Azure Custom DNS Servers (in our exemple, using IPs 10.0.0.4 and 10.0.0.5). Azure Custom DNS Server has been configured to use 168.63.129.16 (Azure Provided DNS Server) as Forwarder.
+In case you need only few computer in your network On-Prem network to be able to resolve Private Link private IP, you can have a local conditional forwarder on each computer to resolve Private Link records in Azure Private DNZ via Azure Custom DNS Servers (in our example, using IPs 10.0.0.4 and 10.0.0.5). Azure Custom DNS Server has been configured to use 168.63.129.16 (Azure Provided DNS Server) as Forwarder.
 ![nprtexample][nrptexample]
 In this scenario, customer does not want to use their On-Prem DNS Server to resolve Private Link. This option is also a good alternative in case customer needs to make short term validation before adding conditional forwarder on their DNS Server or just scope the resolution for few On-premises computers.
 
@@ -44,12 +44,12 @@ Resolve-DnsName "Storage-Account-FQDN" -DnsOnly -Type A | Format-Table -AutoSize
 
 #### Group Policy
 
-Same configuration above can be deployed via Group Policy (GPO), here is an exemple on how to make changes above over Local GPO (gpedit.msc):
+Same configuration above can be deployed via Group Policy (GPO), here is an example on how to make changes above over Local GPO (gpedit.msc):
 ![GroupPolicy][image3]
 
 ### Dnsmasq on Linux (Ubuntu)
 
-This example shows same exact goal stated on previous scenario, but now for Linux  Unbuntu leveraging **dnsmasq**:
+This example shows same exact goal stated on previous scenario, but now for Linux  Ubuntu leveraging **dnsmasq**:
 
 ```Bash
 #Install dnsmasq - Reference: https://docs.microsoft.com/en-us/azure/virtual-machines/linux/azure-dns
@@ -60,7 +60,7 @@ sudo mv -v /etc/dnsmasq.conf /etc/dnsmasq.conf.bkp
 
 # Adding core.windows.net conditional forwarder rules
 # Note 1: this can be done with any domain level or full dns name
-# Example: (FQDN) such as: blob.core.windows.net or windows.net or full storageaccount fqdn, i.e. stgspk1.blob.core.windows.net)
+# Example: (FQDN) such as: blob.core.windows.net or windows.net or full storage account FQDN, i.e. stgspk1.blob.core.windows.net)
 # Note 2: multiple lines or use editor commands such as nano or vim using example above: server=/FQDN-or-domain/FW-DNSServer
 echo server=/core.windows.net/10.0.0.4 | sudo tee -a /etc/dnsmasq.conf
 echo server=/core.windows.net/10.0.0.5 | sudo tee -a /etc/dnsmasq.conf
@@ -94,7 +94,7 @@ It shows query from OnPremLXVM1 going directly to Azure Custom DNS Servers.
 
 ## Scenario 2: Conditional Forwarder exceptions
 
-There are specific scenarios customer may need to create exceptions when dealing with Private Endpoints name resoltion hosted in Azure Private DNS zones. One of them is illustrated on this article: [Unable to access each other PaaS Resources when both sides are exposed to PrivateLink/Endpoint](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink). The solution pointed there, when name resolution does not work properly, is to have to create a Conditional Forwarder to make sure Storage Account from Contoso gets resolved by its Public IP instead. More detailed specific steps can be found in: [Solution 1 - Create a conditional forwarder for storage account DNS name (FQDN)](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink#solution-1---create-a-conditional-forwarder-for-storage-account-dns-name-fqdn).
+There are specific scenarios customer may need to create exceptions when dealing with Private Endpoints name resolution hosted in Azure Private DNS zones. One of them is illustrated on this article: [Unable to access each other PaaS Resources when both sides are exposed to PrivateLink/Endpoint](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink). The solution pointed there, when name resolution does not work properly, is to have to create a Conditional Forwarder to make sure Storage Account from Contoso gets resolved by its Public IP instead. More detailed specific steps can be found in: [Solution 1 - Create a conditional forwarder for storage account DNS name (FQDN)](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink#solution-1---create-a-conditional-forwarder-for-storage-account-dns-name-fqdn).
 In case Custom DNS Server is not available in your Azure VNET, you can also use same techniques explained on previous section by leveraging NRPT on Windows or dnsmasq on Linux. However, in this case we will redirect traffic to an external resolver to make an  exceptions.
 Below, there are examples, for both platforms Windows and Linux, using the same example of the article (Conditional Forwarder to OpenDNS Public Resolvers: 208.67.222.222 and 208.67.220.220) to get storage account name **contosostg1.blob.core.windows.net** resolved and final result Public IP 52.230.240.94 as response.
 
