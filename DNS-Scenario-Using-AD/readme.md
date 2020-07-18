@@ -1,13 +1,20 @@
 # Private Link DNS Scenario using Active Directory
 
+## Content
+Introduction](#introduction)
+[Scenario](#scenario) 
+[Deploying the solution](#deploying-the-solution)
+[Azure side](#azure-side)
+[LAB](#lab)
+[Closing](#closing)
+
 ## Introduction
 
 Several companies use Active Directory (AD) as their primary authentication service. One of the core components that to make AD run properly is Domain Name Services (DNS) and brings a lot of several advantages such as a full feature DNS as well as replication of DNS zones using AD replication. Another capability of DNS in AD environments is the capability to make DNS zone application partitions which allows as well as define replication scopes.
 
 Specifically for Private Link/Endpoint integration you need to create conditional forwarders zones in On-Premises to reach
 
-If you don't have a fully understanding on how Private Link/Endpoint works, it is recommended you review the following article:
-***Add link here
+If you don't have a fully understanding on how Private Link/Endpoint works, it is recommended you review the following article: [Private Endpoint DNS Integration Scenarios](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios).
 
 ## Scenario
 
@@ -33,10 +40,14 @@ $CFZ="blob.core.windows.net"
 Add-DnsServerDirectoryPartition -Name $AZDNSADPartition
 ```
 
-3. Create Conditional Fowarder Zone integrated to AD (Only execute once - you don't need to run on every DC)
-```
+3. Create Conditional Fowarder Zone integrated to AD 
+
+In this case a conditional forwarder to: blob.core.windows.net will be created and 168.63.129.16
+
+```Powershell
 Add-DnsServerConditionalForwarderZone -ComputerName $AZDC1 -Name $CFZ -ReplicationScope Custom -DirectoryPartitionName $AZDNSADPartition -MasterServers 168.63.129.16
 ```
+
 4. Register
 ```
 Register-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
@@ -50,10 +61,10 @@ Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
 
 Expected output:
 
-## Conclusion
+## LAB
 
+A Lab for this scenario will be included soon, stay tunned.
 
-## Acknowledgments
+## Closing
 
-Azure Networking GBB Team for always providing feedback on my articles as well as Cloud Solution Architect Clive who brought the request to my attention and made this scenario work for a customer and we hope that can also help your customers too.
-
+Thanks for Azure Networking GBB Team for reviewing this content and special thanks for Microsoft FTE Clive Graven.
