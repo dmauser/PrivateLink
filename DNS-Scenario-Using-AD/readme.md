@@ -1,12 +1,18 @@
-# Private Link DNS Scenario using Active Directory
+# Private Link DNS integration using Active Directory
 
 ## Content
-Introduction](#introduction)
-[Scenario](#scenario) 
+[Introduction](#introduction)
+
+[Scenario](#scenario)
+
 [Deploying the solution](#deploying-the-solution)
-[Azure side](#azure-side)
-[On-Premises](#on-premises)
+
+[Azure side configuration](#azure-side-configuration)
+
+[On-Premises side configuration](#on-premises-side-configuration)
+
 [LAB](#lab)
+
 [Closing](#closing)
 
 ## Introduction
@@ -21,54 +27,96 @@ If you don't have a fully understanding on how Private Link/Endpoint works, it i
 
 In this scenario with Active Directory customer wants to integrate Azure Private DNS which requires customer to create a conditional forwarder zone to blob.core.windows.net integrated with AD. The biggest advantage of using this approach is customer does not require to create a Conditional Forwarder individually in each Domain Controller running DNS Server. Instead, customer creates a single Conditional Forwarder Zone and integrate it with Active Directory application partition. With that integration the Conditional Forwarder zone will be replicated automatically to all Domain Controllers.
 
+![](./private-link-ad-scenario.png)
+
+:point_right: **Note 1:** This scenario takes in consideration same Active Directory Forest shared between On-Premises and Azure. This scenarios is referred in Azure Architecture documentation as: [Extend your on-premises Active Directory domain to Azure](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adds-extend-domain).
+
+:point_right: **Note 2:** This scenario also considers global forwarder setting on Azure DCs and OnPrem DCs point to another DNS Server (either internal or external). That is not illustrated on the diagram above
+
 ## Deploying the solution
 
-Below is the commands used to make this solution to work on the scenario above:
+Below is the commands used to make this solution to work on the scenario above. That will require commands to be executed at least in one Domain Controller, it does not matter if they are On-premises or in Azure.
+Same blob.core.windows.net conditional forward zone will be deploy for Azure DCs and OnPrem DCs but on Azure side that will have as target 168.63.129.16 (Azure Provided DNS) while OnPrem side will have Azure DCs as targets (HUBWDC1/10.0.1.10 and HUBWDC2/10.0.1.11).
 
-### Azure side
+### Azure Custom DNS Zone
 
-1. Define variables Powershell variables
+Example commands to deploy the solution targeting Azure Domain Controllers hosting conditional forwarder zone blob.core.windows.net to 168.63.129.16: 
+
+1. Define Powershell variables
+
+    ```Powershell
+    $AZDNSADPartition="AzureDNS" #Name of the AD Application Partition
+    $AZDC1="HUBWDC1" #DC1 in Azure
+    $AZDC2="HUBWDC2" #DC2 in Azure
+    $CFZ="blob.core.windows.net"
+    ```
+
+2. Create DNS Application Partition
+
+    ```Powershell
+    Add-DnsServerDirectoryPartition -Name $AZDNSADPartition
+    ```
+
+3. Create Conditional Forwarder Zone integrated to AD
+
+    In this case a conditional forwarder to: blob.core.windows.net will be created and set target DNS Server 168.63.129.16 (Azure Provided DNS).
+
+    ```powershell
+    Add-DnsServerConditionalForwarderZone -ComputerName $AZDC1 `
+    -Name $CFZ -ReplicationScope Custom -DirectoryPartitionName $AZDNSADPartition `
+    -MasterServers 168.63.129.16
+    ```
  
-```Powershell
-$AZDNSADPartition="AzureDNS" #Name of the AD Application Partition
-$AZDC1="HUBWDC1" #DC1 in Azure
-$AZDC2="HUBWDC2" #DC2 in Azure
-$CFZ="blob.core.windows.net" 
-```
 
-2. Creating DNS Application Partition
-```
-Add-DnsServerDirectoryPartition -Name $AZDNSADPartition
-```
+4. Register additional domain controller to be part of the same DNS application partition
+    ```powershell
+    Register-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2    
+    ```
 
-3. Create Conditional Fowarder Zone integrated to AD 
 
-In this case a conditional forwarder to: blob.core.windows.net will be created and 168.63.129.16
+5. Validate both Azure DCs (HUBWDC1 and HUBWDC2) belong to the same replication scope
 
-```Powershell
-Add-DnsServerConditionalForwarderZone -ComputerName $AZDC1 -Name $CFZ -ReplicationScope Custom -DirectoryPartitionName $AZDNSADPartition -MasterServers 168.63.129.16
-```
+    ```Powershell
+    Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC1
+    Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
+    ```
 
-4. Register
-```
-Register-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
-```
+    Expected output:
 
-5. Validate
-```
-Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC1
-Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
-```
+    It shows both HUBWDC1 and HUBWDC2 enlisted on AzureDNS Application Partition
 
-Expected output:
+    ![](./validation-az-output1.png)
 
-# On-Premises
+    DNSCMD.exe command can also be used to validate if both domain controllers belong to the same application partition:
 
+    ```powershell-interactive
+    dnscmd $AZDC1 /directorypartitioninfo $AZDNSADPartition /detail
+    dnscmd $AZDC2 /directorypartitioninfo $AZDNSADPartition /detail
+    ```
+    
+    Output:
+
+    ![](./dnscmd-output-azuredcs.png)
+
+    At this point configured DNS Zone integrated with Active Directory show in both enlisted Azure DCs with exact same configuration. That will not be replicated down to On-Premises DCs because they will use same zone blob.core.windows.net but pointing to different IPs (Azure HUBWDC1 and HUBWDC2)
+
+    ![](./azure-dns-console.png)
+
+### On-Premises Custom DNS Zone
 
 ## LAB
 
-A Lab for this scenario will be included soon, stay tunned.
+A template or script to practice this deployment will be included soon. At this time deploy two VNETs (one to simulate On-premises and another to simulate Azure).
+
+- Define On-premises Virtual Network with address space 192.168.0.0/24
+    - Configure DNS to use 192.168.0.37 and 192.168.0.38.
+- Define Azure Virtual Network with address space space 10.0.0.0/16
+    - Configure VNET DNS Settings to use 10.0.1.10 and 10.0.1.11.
+- Create a VNET Peering or Virtual Network Gateway in each VNET and connect them.
+- Install two VMs on each VNET with respective static IP 
+    - OnPremDC1(192.168.0.37), OnPremDC2(192.168.0.38), HUBWDC1(10.0.1.10) and HUBWDC2(10.0.1.11).
+- Configure Active Directory single forest and promote all of VMs as Domain Controllers.
 
 ## Closing
 
-Thanks for Azure Networking GBB Team for reviewing this content and special thanks for Microsoft FTE Clive Graven.
+Thanks for Azure Networking GBB Team for reviewing this content and special thanks for Microsoft FTE Clive Graven for his collaboration to make this content.
