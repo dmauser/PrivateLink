@@ -189,4 +189,4 @@ A template or script to practice this deployment will be included soon. At this 
 
 ## Closing
 
-Thanks for Azure Networking GBB Team and special thanks for Microsoft FTE Clive Graven for his collaboration to make this content.
+Thanks for Azure Networking GBB Team and special thanks for Microsoft FTE Clive Graven for collaboration on this content.
