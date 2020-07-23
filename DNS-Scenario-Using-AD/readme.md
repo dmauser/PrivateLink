@@ -1,4 +1,4 @@
-# Private Link DNS integration using Active Directory
+# Private Endpoint DNS integration using Active Directory
 
 ## Content
 [Introduction](#introduction)
