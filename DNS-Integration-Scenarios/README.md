@@ -274,6 +274,8 @@ In order to make name resolution integration to OnPrem each one of the region ha
 
 The intention of this document was to enumerate options and common scenarios when integrating Private Link/Endpoint with DNS name resolution. When planning that DNS integration with them there are few considerations that need to be taken in account and more than one solution is possible. Therefore, it is important to note that not all scenarios are covered here but the intention was to provide some insights on how that integration works as well as ensure you make proper tools to assess customer's current DNS scenario and  implement the solution that fit their needs to properly consume Private Link/Endpoint.
 
+Other relevant resources can be found in [Private Link/Endpoint DNS Integration Resources](https://github.com/dmauser/PrivateLink).
+
 ## 7. Appendix A - Validating DNS resolution
 
 To clarify better on how PaaS service DNS name resolution works when dealing with private endpoint works the following command _Resolve-DnsName_ can provide good details. In this section, storage account name: _gbbstg1.blob.core.windows.net_. will be used as an example:
