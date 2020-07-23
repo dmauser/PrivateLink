@@ -29,6 +29,8 @@ In this scenario with Active Directory customer wants to integrate Azure Private
 
 ![](./private-link-ad-scenario.png)
 
+Download a [Visio file](https://raw.githubusercontent.com/dmauser/PrivateLink/master/DNS-Scenario-Using-AD/private-endpoint-dns-ad-integraton.vsdx) of this architecture.
+
 :point_right: **Note 1:** This scenario takes in consideration same Active Directory Forest shared between On-Premises and Azure. This scenarios is referred in Azure Architecture documentation as: [Extend your on-premises Active Directory domain to Azure](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adds-extend-domain).
 
 :point_right: **Note 2:** This scenario also considers global forwarder setting on Azure DCs and OnPrem DCs point to another DNS Server (either internal or external). That configuration is not illustrated on the diagram above and assumes DNS is pointing to another IP as Global Forwarder.
