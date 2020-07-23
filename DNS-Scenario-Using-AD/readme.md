@@ -5,11 +5,11 @@
 
 [Scenario](#scenario)
 
-[Deploying the solution](#deploying-the-solution)
+[How to deploy the solution](#how-to-deloy-the-solution)
 
-[Azure side configuration](#azure-side-configuration)
+[Azure Custom AD DNS Zone](#azure-custom-ad-dns-zone)
 
-[On-Premises side configuration](#on-premises-side-configuration)
+[On-Premises Custom AD DNS Zone](#on-premises-custom-ad-dns-zone)
 
 [LAB](#lab)
 
@@ -17,7 +17,7 @@
 
 ## Introduction
 
-Several companies use Active Directory (AD) as their primary authentication service. One of the core components that to make AD run properly is Domain Name Services (DNS) and brings a lot of several advantages such as a full feature DNS as well as replication of DNS zones using AD replication. Another capability of DNS in AD environments is the capability to make DNS zone application partitions which allows as well as define replication scopes.
+Several companies use Active Directory (AD) as their primary authentication service. One of the core components that to make AD run properly is Domain Name Services (DNS) and brings specific functionality advantages, such as a full feature DNS as well as replication of DNS zones using AD replication. Another capability of DNS in AD environments is the capability to make DNS zone application partitions which allows as well as define replication scopes.
 
 Specifically for Private Link/Endpoint integration you need to create conditional forwarders zones in On-Premises to reach Domain Controllers in Azure and from those reach to 168.63.1
 
@@ -31,78 +31,148 @@ In this scenario with Active Directory customer wants to integrate Azure Private
 
 :point_right: **Note 1:** This scenario takes in consideration same Active Directory Forest shared between On-Premises and Azure. This scenarios is referred in Azure Architecture documentation as: [Extend your on-premises Active Directory domain to Azure](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adds-extend-domain).
 
-:point_right: **Note 2:** This scenario also considers global forwarder setting on Azure DCs and OnPrem DCs point to another DNS Server (either internal or external). That is not illustrated on the diagram above
+:point_right: **Note 2:** This scenario also considers global forwarder setting on Azure DCs and OnPrem DCs point to another DNS Server (either internal or external). That configuration is not illustrated on the diagram above and assumes DNS is pointing to another IP as Global Forwarder.
 
-## Deploying the solution
+## How to deploy the solution
 
 Below is the commands used to make this solution to work on the scenario above. That will require commands to be executed at least in one Domain Controller, it does not matter if they are On-premises or in Azure.
 Same blob.core.windows.net conditional forward zone will be deploy for Azure DCs and OnPrem DCs but on Azure side that will have as target 168.63.129.16 (Azure Provided DNS) while OnPrem side will have Azure DCs as targets (HUBWDC1/10.0.1.10 and HUBWDC2/10.0.1.11).
 
-### Azure Custom DNS Zone
+### Azure Custom AD DNS Zone
 
-Example commands to deploy the solution targeting Azure Domain Controllers hosting conditional forwarder zone blob.core.windows.net to 168.63.129.16: 
+Below are the setps to deploy this solution on Azure Domain Controllers hosting conditional forwarder zone blob.core.windows.net to 168.63.129.16 (Azure Provided DNS) 
 
 1. Define Powershell variables
 
-    ```Powershell
-    $AZDNSADPartition="AzureDNS" #Name of the AD Application Partition
-    $AZDC1="HUBWDC1" #DC1 in Azure
-    $AZDC2="HUBWDC2" #DC2 in Azure
-    $CFZ="blob.core.windows.net"
-    ```
+```Powershell
+$AZDNSADPartition="AzureDNS" #Name of the AD Application Partition
+$AZDC1="HUBWDC1" #DC1 in Azure
+$AZDC2="HUBWDC2" #DC2 in Azure
+$CFZ="blob.core.windows.net"
+```
 
 2. Create DNS Application Partition
 
-    ```Powershell
-    Add-DnsServerDirectoryPartition -Name $AZDNSADPartition
-    ```
+```Powershell
+Add-DnsServerDirectoryPartition -Name $AZDNSADPartition
+```
 
 3. Create Conditional Forwarder Zone integrated to AD
 
-    In this case a conditional forwarder to: blob.core.windows.net will be created and set target DNS Server 168.63.129.16 (Azure Provided DNS).
+In this case a conditional forwarder to: blob.core.windows.net will be created and set target DNS Server 168.63.129.16 (Azure Provided DNS).
 
-    ```powershell
-    Add-DnsServerConditionalForwarderZone -ComputerName $AZDC1 `
-    -Name $CFZ -ReplicationScope Custom -DirectoryPartitionName $AZDNSADPartition `
-    -MasterServers 168.63.129.16
-    ```
- 
+```powershell
+Add-DnsServerConditionalForwarderZone -ComputerName $AZDC1 `
+-Name $CFZ -ReplicationScope Custom -DirectoryPartitionName $AZDNSADPartition `
+-MasterServers 168.63.129.16
+```
 
-4. Register additional domain controller to be part of the same DNS application partition
-    ```powershell
-    Register-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2    
-    ```
+4. Register additional domain controller (HUBWDC2) to be part of the same DNS application partition (AzureDNS). In case you have additional Azure domain controllers you can re-run same command by specifying its name.
 
+```powershell
+Register-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
+```
 
-5. Validate both Azure DCs (HUBWDC1 and HUBWDC2) belong to the same replication scope
+5. Validate both Azure DCs (HUBWDC1 and HUBWDC2) belong to AzureDNS application partition replication scope.
 
-    ```Powershell
-    Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC1
-    Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
-    ```
+```Powershell
+Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC1
+Get-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
+```
 
-    Expected output:
+Expected output:
 
-    It shows both HUBWDC1 and HUBWDC2 enlisted on AzureDNS Application Partition
+It shows both HUBWDC1 and HUBWDC2 enlisted on AzureDNS Application Partition
 
-    ![](./validation-az-output1.png)
+![](./validation-az-output1.png)
 
-    DNSCMD.exe command can also be used to validate if both domain controllers belong to the same application partition:
+DNSCMD.exe command can also be used to validate if both domain controllers belong to the same application partition:
 
-    ```powershell-interactive
-    dnscmd $AZDC1 /directorypartitioninfo $AZDNSADPartition /detail
-    dnscmd $AZDC2 /directorypartitioninfo $AZDNSADPartition /detail
-    ```
-    
-    Output:
+```powershell
+# Output for HUBWDC1
+dnscmd $AZDC1 /directorypartitioninfo $AZDNSADPartition /detail
+# Output for HUBWDC2
+dnscmd $AZDC2 /directorypartitioninfo $AZDNSADPartition /detail
+```
 
-    ![](./dnscmd-output-azuredcs.png)
+Output:
 
-    At this point configured DNS Zone integrated with Active Directory show in both enlisted Azure DCs with exact same configuration. That will not be replicated down to On-Premises DCs because they will use same zone blob.core.windows.net but pointing to different IPs (Azure HUBWDC1 and HUBWDC2)
+![](./dnscmd-output-azuredcs.png)
 
-    ![](./azure-dns-console.png)
+At this point configured DNS Zone integrated with Active Directory show in both enlisted Azure DCs with exact same configuration. That will not be replicated down to On-Premises DCs because they will use same zone blob.core.windows.net but pointing to different IPs (Azure HUBWDC1 and HUBWDC2). On Azure DCs DNS Management console you will see conditional forwarder blob.core.windows.net using 168.63.129.16.
 
-### On-Premises Custom DNS Zone
+![](./azure-dns-console.png)
+
+### On-Premises Custom AD DNS Zone
+
+Here are the steps to deploy this on On-Premises DCs hosting conditional forwarder zone blob.core.windows.net to Azure DCs (10.0.1.10 and 10.0.1.11):
+
+1. Define Powershell variables
+
+```Powershell
+$AZDNSADPartition="OnPremDNS" #Name of the AD Application Partition
+$AZDC1="ONPREMDC1" #DC1 in Azure
+$AZDC2="ONPREMDC2" #DC2 in Azure
+$CFZ="blob.core.windows.net"
+```
+
+2. Create DNS Application Partition
+
+```Powershell
+Add-DnsServerDirectoryPartition -Name $OPDNSADPartition
+```
+
+3. Create Conditional Forwarder Zone integrated to AD
+
+In this case a conditional forwarder to: blob.core.windows.net will be created and set target DNS Server 168.63.129.16 (Azure Provided DNS).
+
+```powershell
+Add-DnsServerConditionalForwarderZone -ComputerName $OPDC1 `
+-Name $CFZ -ReplicationScope Custom -DirectoryPartitionName $OPDNSADPartition `
+-MasterServers 10.0.1.10,10.0.1.11
+ ```
+
+4. Register additional domain controller (ONPREMDC2) to be part of the same DNS application partition (OnPremDNS). In case you have additional On-prem domain controllers you can re-run same command by specifying its name.
+
+```powershell
+Register-DnsServerDirectoryPartition -Name $OPDNSADPartition -ComputerName $OPDC2
+```
+
+5. Validate both Azure DCs (ONPREMDC1 and ONPREMDC2) belong to the same OnPrem application partition replication scope
+
+```Powershell
+Get-DnsServerDirectoryPartition -Name $OPDNSADPartition -ComputerName $OPDC1
+Get-DnsServerDirectoryPartition -Name $OPDNSADPartition -ComputerName $OPDC2
+```
+
+Expected output:
+
+It shows both ONPREMDC1 and ONPREMDC2 enlisted on AzureDNS Application Partition
+
+![](./validation-onprem-output1.png)
+
+DNSCMD.exe command can also be used to validate if both domain controllers belong to the same application partition:
+
+```powershell
+# Output for OnpremDC1
+dnscmd $OPDC1 /directorypartitioninfo $OPDNSADPartition /detail
+# Output for OnpremDC2
+dnscmd $OPDC2 /directorypartitioninfo $OPDNSADPartition /detail
+```
+
+Output:
+
+![](./dnscmd-output-onpremdcs.png)
+
+On On-premises DCs DNS Management console you will see conditional forwarder blob.core.windows.net using 10.0.1.10 and 10.0.1.11 (Azure DCs HUBWDC1 and HUBWDC2)
+
+![](./onprem-dns-console.png)
+
+## Final DNS validation (Private Endpoint)
+
+As final step for this validation below we have a full name resolution to resolve storage account name from Azure as well as from On-premises:
+
+![](./storage-privlink-resolution.png)
 
 ## LAB
 
@@ -119,4 +189,4 @@ A template or script to practice this deployment will be included soon. At this 
 
 ## Closing
 
-Thanks for Azure Networking GBB Team for reviewing this content and special thanks for Microsoft FTE Clive Graven for his collaboration to make this content.
+Thanks for Azure Networking GBB Team and special thanks for Microsoft FTE Clive Graven for his collaboration to make this content.
