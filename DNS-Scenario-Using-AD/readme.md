@@ -166,7 +166,7 @@ Output:
 
 On On-premises DCs DNS Management console you will see conditional forwarder blob.core.windows.net using 10.0.1.10 and 10.0.1.11 (Azure DCs HUBWDC1 and HUBWDC2)
 
-![](./onprem-dns-console.png)
+![](./OnPrem-dns-console.png)
 
 ## Final DNS validation (Private Endpoint)
 
