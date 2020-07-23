@@ -1,4 +1,4 @@
-# PrivateLink
+# Private Link/Endpoint DNS Integration Resources
 
 Content and Labs related to Azure Private Link/Endpoint
 

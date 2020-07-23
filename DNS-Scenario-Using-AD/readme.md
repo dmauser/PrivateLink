@@ -192,3 +192,5 @@ A template or script to practice this deployment will be included soon. At this 
 ## Closing
 
 Thanks for Azure Networking GBB Team and special thanks for Microsoft FTE Clive Graven for collaboration on this content.
+
+Other relevant resources for Private Link/Endpoint DNS integration can be found in [Private Link/Endpoint DNS Integration Resources](https://github.com/dmauser/PrivateLink).
