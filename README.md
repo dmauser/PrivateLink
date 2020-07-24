@@ -13,3 +13,4 @@ Other useful resources (outside of this Github repo):
 - [How to build your own DNS Forwarder](https://github.com/Microsoft/PL-DNS-Proxy)
 - [Using Azure Firewall as DNS Forwarder with Private Link](https://github.com/adstuart/azure-privatelink-dns-azurefirewall)
 - [Azure Private Link Governance and RBAC](https://github.com/adstuart/azure-privatelink-policy)
+- [PaaS architectures and VNet integration patterns](https://github.com/fguerri/AzureVNetIntegrationPatterns)
