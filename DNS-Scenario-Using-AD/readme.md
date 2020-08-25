@@ -17,21 +17,21 @@
 
 ## Introduction
 
-Several companies use Active Directory (AD) as their primary authentication service. One of the core components that to make AD run properly is Domain Name Services (DNS) and brings specific functionality advantages, such as a full feature DNS as well as replication of DNS zones using AD replication. Another capability of DNS in AD environments is the capability to make DNS zone application partitions which allows as well as define replication scopes.
+Several companies use Active Directory (AD) as their primary authentication service. One of the core components to make AD run properly is Domain Name Services (DNS) which brings specific functionality advantages, such as a full feature DNS as well as replication of DNS zones using AD replication. Another capability of DNS in AD environments is the capability to make DNS zone application partitions which allows you to define replication scopes.
 
-Specifically for Private Link/Endpoint integration you need to create conditional forwarders zones in On-Premises to reach Domain Controllers in Azure and from those reach to 168.63.129.16 (Azure Provided DNS) to consume properly Azure Private DNS zone (privatelink.blob.core.windows.net).
+Specifically for Private Link/Endpoint integration, you need to create conditional forwarders zones in On-Premises to reach Domain Controllers in Azure, and from those reach to 168.63.129.16 (Azure Provided DNS) to consume properly Azure Private DNS zone (privatelink.blob.core.windows.net).
 
-If you don't have a fully understanding on how Private Link/Endpoint works, it is recommended you review the following article: [Private Endpoint DNS Integration Scenarios](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios).
+If you don't have a fully understanding on how Private Link/Endpoint works, it is recommended you review the article: [Private Endpoint DNS Integration Scenarios](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios).
 
 ## Scenario
 
-In this scenario with Active Directory customer wants to integrate Azure Private DNS which requires customer to create a conditional forwarder zone to blob.core.windows.net integrated with AD. The biggest advantage of using this approach is customer does not require to create a Conditional Forwarder individually in each Domain Controller running DNS Server. Instead, customer creates a single Conditional Forwarder Zone and integrate it with Active Directory application partition. With that integration the Conditional Forwarder zone will be replicated automatically to all Domain Controllers.
+In this scenario with Active Directory, customer wants to integrate Azure Private DNS which requires them to create a conditional forwarder zone to **blob.core.windows.net** integrated with AD. The biggest advantage this approach is customers do not require to create individual Conditional Forwarders in each Domain Controller running DNS Server. Instead, customers can create a single Conditional Forwarder Zone and integrate it with Active Directory application partition. With that integration the Conditional Forwarder zone will be replicated automatically to all Domain Controllers depending on the replication scope selected.
 
 ![](./private-link-ad-scenario.png)
 
 Download a [Visio file](https://raw.githubusercontent.com/dmauser/PrivateLink/master/DNS-Scenario-Using-AD/private-endpoint-dns-ad-integraton.vsdx) of this architecture.
 
-:point_right: **Note 1:** This scenario takes in consideration same Active Directory Forest shared between On-Premises and Azure. This scenarios is referred in Azure Architecture documentation as: [Extend your on-premises Active Directory domain to Azure](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adds-extend-domain).
+:point_right: **Note 1:** This scenario takes in consideration same Active Directory Forest shared between On-Premises and Azure. This scenario is illustrated on Azure Architecture documentation as: [Extend your on-premises Active Directory domain to Azure](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/identity/adds-extend-domain).
 
 :point_right: **Note 2:** This scenario also considers global forwarder setting on Azure DCs and OnPrem DCs point to another DNS Server (either internal or external). That configuration is not illustrated on the diagram above and assumes DNS is pointing to another IP as Global Forwarder.
 
@@ -42,7 +42,7 @@ Same blob.core.windows.net conditional forward zone will be deploy for Azure DCs
 
 ### Azure Custom AD DNS Zone
 
-Below are the setps to deploy this solution on Azure Domain Controllers hosting conditional forwarder zone blob.core.windows.net to 168.63.129.16 (Azure Provided DNS).
+Below are the steps to deploy this solution on Azure Domain Controllers hosting conditional forwarder zone blob.core.windows.net to 168.63.129.16 (Azure Provided DNS).
 
 1. Define Powershell variables
 
@@ -101,7 +101,7 @@ Output:
 
 ![](./dnscmd-output-azuredcs.png)
 
-At this point configured DNS Zone integrated with Active Directory show in both enlisted Azure DCs with exact same configuration. That will not be replicated down to On-Premises DCs because they will use same zone blob.core.windows.net but pointing to different IPs (Azure HUBWDC1 and HUBWDC2). On Azure DCs DNS Management console you will see conditional forwarder blob.core.windows.net using 168.63.129.16.
+At this point configured DNS Zone integrated with Active Directory show in both enlisted Azure DCs with exact same configuration. That will not be replicated down to On-Premises DCs because they will use same zone blob.core.windows.net but pointing to different IPs (Azure HUBWDC1 and HUBWDC2). On Azure DCs DNS Management console you will see conditional forwarder blob.core.windows.net using 168.63.129.16 (Azure Provided DNS).
 
 ![](./azure-dns-console.png)
 
