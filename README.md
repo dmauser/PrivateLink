@@ -14,3 +14,4 @@ Other useful resources (outside of this Github repo):
 - [Using Azure Firewall as DNS Forwarder with Private Link](https://github.com/adstuart/azure-privatelink-dns-azurefirewall)
 - [Azure Private Link Governance and RBAC](https://github.com/adstuart/azure-privatelink-policy)
 - [PaaS architectures and VNet integration patterns](https://github.com/fguerri/AzureVNetIntegrationPatterns)
+- Recommended Lab to practice Private Link and DNS Integration: [Azure Private Link DNS MicroHack](https://github.com/adstuart/azure-privatelink-dns-microhack)
