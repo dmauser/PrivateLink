@@ -35,7 +35,9 @@ After you save the settings above you a reconnected on Azure VPN Client will tri
 
 **Name Resolution Validation**
 
-Use PowerShell command: **Resolve-DnsName -Name *["Blob storage account FQDN name"] -DnsOnly**
+Use PowerShell command: 
+
+**Resolve-DnsName -Name *["Blob storage account FQDN name"]* -DnsOnly**
 
 For example, using storage account name is: dmcentralus.blob.core.windows.net output is:
 
@@ -61,10 +63,14 @@ Now XLM profile can be imported on Azure VPN Client and here is an example how i
 
 **Validation**
 
-Same validation can be done using solution one by using **Resolve-DnsName -Name *["Blob storage account FQDN name"] -DnsOnly**
+Same validation can be done using solution one by using:
+
+**Resolve-DnsName -Name *["Blob storage account FQDN name"]* -DnsOnly**
 
 ### Dump NRPT configuration
 
-In case you want to see NRTP VPN client setting, run Powershell command **Get-DnsClientNrptPolicy | Format-Table NameSpace, NameServers -AutoSize**
+In case you want to see NRTP VPN client setting, run Powershell command:
+
+**Get-DnsClientNrptPolicy | Format-Table NameSpace, NameServers -AutoSize**
 
 ![Name Resolution Policy Table - NRPT](./dump-nrpt.png)
