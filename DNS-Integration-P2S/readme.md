@@ -15,7 +15,7 @@ In order to P2S VPN clients be able to resolve Private Endpoint entries hosted o
 ## Point to Site VPN name resolution behavior
 
 By design Azure VPN client will set and use DNS servers that are either set on Virtual Network DNS Server or specified in client XLM profile. In case your Virtual Network is set to use Azure Provided DNS (168.63.129.16) you will not be able to resolve Private Endpoint. In case you don’t want to define DNS at the VNET level you can still set DNS Server configuration directly on client XLM profile and set the IP to a DNS Forwarder/Proxy running on Azure. As stated on previous session a DNS Forwarder/Proxy is required to P2S VPN clients be able to resolve endpoints.
-Another very important consideration when you validating this solution is to know that **nslookup** is not the right tools to make the private endpoint name resolution validation over P2S VPN connections. Windows 10 has a feature called [Network Resolution Policy Table](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn593632(v=ws.11)) and VPN connections will add DNS information inside NPTR. Nslookup is not aware of NPTR and you must use PowerShell **Resolve-DNSName** cmdlet to check name resolution over VPN connection is working properly (see examples below of how to do proper name resolution validations).
+Another very important consideration when you validating this solution is to know that **nslookup** is not the right tools to make the private endpoint name resolution validation over P2S VPN connections. Windows 10 has a feature called [Network Resolution Policy Table](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn593632(v=ws.11)) (NRPT) and VPN connections will add DNS information inside NRPT. Nslookup is not aware of NPTR and you must use PowerShell **Resolve-DNSName** cmdlet to check name resolution over VPN connection is working properly (see examples below of how to do proper name resolution validations).
 
 ## Solution
 
@@ -58,3 +58,13 @@ In my example I have added the following entries on Azure VPN Client XLM profile
 Now XLM profile can be imported on Azure VPN Client and here is an example how it going to look like after VPN connection:
 
 ![Azure VPN Client using DNS from client XLM profile](./azure-vpn-client-dns-client-profile.png)
+
+**Validation**
+
+Same validation can be done using solution one by using **Resolve-DnsName -Name *["Blob storage account FQDN name"] -DnsOnly**
+
+### Dump NRPT configuration
+
+In case you want to see NRTP VPN client setting, run Powershell command **Get-DnsClientNrptPolicy | Format-Table NameSpace, NameServers -AutoSize**
+
+![Name Resolution Policy Table - NRPT](./dump-nrpt.png)
