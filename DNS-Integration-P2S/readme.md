@@ -1,5 +1,15 @@
 # Private Endpoint DNS integration over Point to Site VPN connection
 
+**In this article**
+
+[Introduction](#Introduction)
+
+[Assumptions and requirements](#Assumptionsandrequirements)
+
+[Point to Site VPN name resolution behavior](#PointtoSiteVPNnameresolutionbehavior)
+
+[Solution](#Solution)
+
 ## Introduction
 In this post we are going on details on how to make Private Endpoint DNS name resolution work properly over point to site (P2S) VPN connections using Azure Virtual Network VPN Gateway or Virtual WAN VPN Gateway.
 
@@ -23,7 +33,7 @@ Below is diagram with the DNS name resolution flow from P2S VPN connection. The 
 
 ![Private Endpoint DNS integration using point-to-site VPN](./private-endpoint-dns-p2s-vpn.png)
 
-### Solution 1: Defined DNS Server on Virtual Network
+### Solution 1: Specify DNS Server for the Virtual Network
 
 Specify DNS Setting at the VNET level as shown:
 
@@ -45,9 +55,10 @@ For example, using storage account name is: dmcentralus.blob.core.windows.net ou
 
 In case you run **nslookup** will bring storage account Public IP as output because it does not support NRPT feature.
 
-### Solution 2: Specify DNS Server on Client VPN Profile
-Download VPN Client profile to your computer and add DNS settings. Detailed steps can also be found in  How do I add custom DNS servers to the VPN client? 
-In my example I have added the following entries on Azure VPN Client XLM profile:
+### Solution 2: Specify DNS Server inside VPN Client Profile
+Download VPN Client profile to your computer and add DNS settings. Detailed steps can also be found at: [How do I add custom DNS servers to the VPN client?](https://docs.microsoft.com/en-us/azure/vpn-gateway/openvpn-azure-ad-client#how-do-i-add-custom-dns-servers-to-the-vpn-client) 
+
+In this article's example I have added the following entries on Azure VPN Client XLM profile:
 
 ```XLM
   <clientconfig>
@@ -63,7 +74,7 @@ Now XLM profile can be imported on Azure VPN Client and here is an example how i
 
 **Validation**
 
-Same validation can be done using solution one by using:
+Same validation can be done by using as shown in Solution 1:
 
 **Resolve-DnsName -Name *["Blob storage account FQDN name"]* -DnsOnly**
 
