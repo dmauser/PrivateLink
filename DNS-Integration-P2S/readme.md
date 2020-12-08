@@ -10,7 +10,7 @@ Also it requires that you have a DNS Forwarder or Proxy to reach respective PaaS
 
 In order to P2S VPN clients be able to resolve Private Endpoint entries hosted on Azure Private DNS Zones you must leverage an existing DNS Server (Forwarder or Proxy) or deploy one IaaS VM using a DNS Server role. That is required to P2S VPN clients be able to consume Azure Private DNS Zone which is exposed to 168.63.129.16 via DNS Forwarder/Proxy.
 
-:point_right **Note:** this article has been validated with [Azure VPN Client](https://www.microsoft.com/en-us/p/azure-vpn-client/9np355qt2sqb?activetab=pivot:overviewtab) at the time of this writing and other VPN clients such and it hasn’t been validated with IPSec/IKE VPN Client (Native Windows 10) or OpenVPN Client. 
+:point_right: **Note:** this article has been validated with [Azure VPN Client](https://www.microsoft.com/en-us/p/azure-vpn-client/9np355qt2sqb?activetab=pivot:overviewtab) at the time of this writing and other VPN clients such and it hasn’t been validated with IPSec/IKE VPN Client (Native Windows 10) or OpenVPN Client. 
 
 ## Point to Site VPN name resolution behavior
 
