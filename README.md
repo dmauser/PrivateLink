@@ -6,6 +6,7 @@ Content and Labs related to Azure Private Link/Endpoint
 - [Known Issue: Azure Customers are unable to access each other PaaS Resources when both sides are exposed to PrivateLink/Endpoint](https://github.com/dmauser/PrivateLink/tree/master/Issue-Customer-Unable-to-Access-PaaS-AfterPrivateLink)
 - [DNS Client Configuration Options for Private Endpoints](https://github.com/dmauser/PrivateLink/tree/master/DNS-Client-Configuration-Options)
 - [Private Endpoint DNS integration using Active Directory](https://github.com/dmauser/PrivateLink/tree/master/DNS-Scenario-Using-AD)
+- [Private Endpoint DNS integration over Point to Site VPN connection](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-P2S)
 
 Other useful resources (outside of this Github repo):
 
