@@ -56,7 +56,7 @@ $CFZ="blob.core.windows.net"
 2. Create DNS Application Partition
 
 ```Powershell
-Add-DnsServerDirectoryPartition -Name $AZDNSADPartition
+Add-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC1
 ```
 
 3. Create Conditional Forwarder Zone integrated to AD
