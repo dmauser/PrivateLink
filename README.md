@@ -16,5 +16,5 @@ Other useful resources (outside of this Github repo):
 - [Azure Private Link Governance and RBAC](https://github.com/adstuart/azure-privatelink-policy)
 - [PaaS architectures and VNet integration patterns](https://github.com/fguerri/AzureVNetIntegrationPatterns)
 - Recommended Lab to practice Private Link and DNS Integration: [Azure Private Link DNS MicroHack](https://github.com/adstuart/azure-privatelink-dns-microhack)
-- Demonstrates how to use Azure Policy to enforce use of private endpoint and automate the DNS record creation in DNS zone: [Private Link and DNS integration at scale](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale)
+- Demonstrates how to use Azure Policy to enforce the use of private endpoint and automate the DNS record creation in DNS zone: [Private Link and DNS integration at scale](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale)
 - Recommended article going over Private Endpoint topologies when deciding [centralized vs decentralized Private DNS Zones](https://github.com/paolosalvatori/private-endpoints-topologies) designing approaches.
