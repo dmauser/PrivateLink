@@ -4,13 +4,13 @@
 
 [Use case](#Usecase)
 
-[Architecture diagram](#Architecturediagram)
+[Architecture diagram](#Architecture-diagram)
 
 [Concepts](#Concepts)
 
-[Azure Front Door](#AzureFrontDoor)
+[Azure Front Door](#Azure-Front-Door)
 
-[Lab this solution](#Labthissolution)
+[Lab this solution](#Lab-this-solution)
 
 ## Use case
 
