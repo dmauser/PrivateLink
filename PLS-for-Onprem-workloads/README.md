@@ -24,7 +24,7 @@ The main solution referred by Microsoft documentation expects that provider's wo
 
 It is important to keep in mind that there are several reasons customers may not be able to move their resources to Azure, to enumerate a few of them listed here but not limited to:
 
-1. Regulatory constraints that dictate that data must be present On-premises.
+1. Regulatory constraints that dictate that data must be stored On-premises.
 2. Application design requirements like legacy applications that are not ready to be modernized or moved to the Cloud.
 3. Infrastructure constraints where data has better performance being accessed from On-premises.
 4. Costs to bring data from Cloud to On-premises like a database replication may incur egress costs.
