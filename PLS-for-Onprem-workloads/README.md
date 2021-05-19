@@ -18,7 +18,7 @@
 
 There is an increased customer demand for Private Link to consume several PaaS services that have onboarded that feature. On the other hand, mostly due to the popularity of Private Link, other scenarios have emerged where Azure customers want to publish their services to be consumed by other Azure customers. For that approach, there's a feature called Private Link Service (also known as exposing your own service so others can connect).
 
-To leverage Private Link Service as a service provider, it is necessary to have your workloads to be placed behind an Azure Standard Load balancer (either public or internal) and have your virtual machine or scale set attached to it. Also, you have to create a Private Link Service and associate it to the Load Balancer front-end IP. For more information consult [What is Azure Private Link service?](https://docs.microsoft.com/en-us/azure/private-link/private-link-service-overview). On the other side consumers, customers who are also present in Azure, have to create a Private Endpoint to be able to access published services that providers made available over Private Link Service.
+To leverage Private Link Service as a service provider, it is necessary to have your workloads to be placed behind an Azure Standard Load balancer (either public or internal) and have your virtual machine or scale set attached to it. Also, you have to create a Private Link Service and associate it to the Load Balancer front-end IP. For more information consult [What is Azure Private Link service?](https://docs.microsoft.com/en-us/azure/private-link/private-link-service-overview). Consumers of the service who are customers and also present in Azure, have to create a Private Endpoint to be able to access published services that providers made available over Private Link Service.
 
 The main solution referred by Microsoft documentation expects that provider's workloads to be published is present in Azure, more specifically in Azure Virtual Network. The question that remains and the main focus of this article is: **how about On-premises workloads** like a Database or Web servers have that same capability to be offered over Private link service to other consumers privately using Azure?  That is exactly the scope of this post is to give customers the flexibility to also offer workloads outside of the Azure Virtual Network, like when they reside On-premises, to be consumed by other Azure customers (consumers).
 
@@ -56,6 +56,7 @@ Second, here is a breakdown of requirements from Providers and Consumers:
 
 ### Consumer
 
+- Obtain the Private Link Service ID (resource ID or alias) from Provider.
 - Azure Private Endpoint using a customer's VNET private IP.
 - Proper DNS configuration to resolve Private Endpoint IP (optional).
 
