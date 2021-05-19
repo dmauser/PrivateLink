@@ -1,6 +1,6 @@
 # Using Private Link Service for On-premises workloads
 
-**In this article**
+**Contents**
 
 [Use case](#Usecase)
 
@@ -20,7 +20,7 @@ There is an increased customer demand for Private Link to consume several PaaS s
 
 To leverage Private Link Service as a service provider, it is necessary to have your workloads to be placed behind an Azure Standard Load balancer (either public or internal) and have your virtual machine or scale set attached to it. Also, you have to create a Private Link Service and associate it to the Load Balancer front-end IP. For more information consult [What is Azure Private Link service?](https://docs.microsoft.com/en-us/azure/private-link/private-link-service-overview). Consumers of the service who are customers and also present in Azure, have to create a Private Endpoint to be able to access published services that providers made available over Private Link Service.
 
-The main solution referred by Microsoft documentation expects that provider's workloads to be published is present in Azure, more specifically in Azure Virtual Network. The question that remains and the main focus of this article is: **how about On-premises workloads** like a Database or Web servers have that same capability to be offered over Private link service to other consumers privately using Azure?  That is exactly the scope of this post is to give customers the flexibility to also offer workloads outside of the Azure Virtual Network, like when they reside On-premises, to be consumed by other Azure customers (consumers).
+The main solution referred by Microsoft documentation expects that provider's workloads to be published is present in Azure, more specifically in Azure Virtual Network. The question that remains and the main focus of this article is **how about On-premises workloads** like a Database or Web servers have that same capability to be offered over Private link service to other consumers privately using Azure?  That is exactly the scope of this post is to give customers the flexibility to also offer workloads outside of the Azure Virtual Network, like when they reside On-premises, to be consumed by other Azure customers (consumers).
 
 It is important to keep in mind that there are several reasons customers may not be able to move their resources to Azure, to enumerate a few of them listed here but not limited to:
 
@@ -34,6 +34,8 @@ It is important to keep in mind that there are several reasons customers may not
 The architecture diagram below shows a Provider that has a Web Server on their On-premises network and wants to allow Customer A and Customer B to access it privately using Azure infrastructure.
 
 ![On-prem-Provider-to-consumers](./media/On-prem-provider-consumers.png)
+
+_Download a Visio [file](./PLS-on-prem-workloads.vsdx) of this architecture and use Layers to add or remove components._
 
 ## Concepts
 
