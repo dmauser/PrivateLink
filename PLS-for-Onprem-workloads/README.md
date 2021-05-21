@@ -87,4 +87,8 @@ Another capability customers can leverage from this solution is to use Azure Fro
 
 ## Lab this solution
 
-You can lab this solution fully and test all moving parts by leveraging the following lab guide: (Link to be added)
+You can lab this solution fully and test all moving parts by leveraging the following lab guides.
+
+- [Using Private Link Service to publish On-premises workloads by using HAProxy](https://github.com/dmauser/Lab/tree/master/PLS-for-onprem-workloads-haproxy)
+- Using Private Link Service to publish On-premises workloads by using 3rd Party NVA (coming soon)
+- Using Private Link Service to publish On-premises workloads by using Azure Front Door (coming soon)
