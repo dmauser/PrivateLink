@@ -7,6 +7,7 @@ Content and Labs related to Azure Private Link/Endpoint
 - [DNS Client Configuration Options for Private Endpoints](https://github.com/dmauser/PrivateLink/tree/master/DNS-Client-Configuration-Options)
 - [Private Endpoint DNS integration using Active Directory](https://github.com/dmauser/PrivateLink/tree/master/DNS-Scenario-Using-AD)
 - [Private Endpoint DNS integration over Point to Site VPN connection](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-P2S)
+- [Using Private Link Service for On-premises workloads](https://github.com/dmauser/PrivateLink/tree/master/PLS-for-Onprem-workloads)
 
 Other useful resources (outside of this Github repo):
 
