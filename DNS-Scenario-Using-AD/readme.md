@@ -47,7 +47,7 @@ Below are the steps to deploy this solution on Azure Domain Controllers hosting 
 1. Define Powershell variables
 
 ```Powershell
-$AZDNSADPartition="AzureDNS" #Name of the AD Application Partition
+$AZDNSADPartition="AzureDNS.contoso.corp" #Name of the AD Application Partition - replace with your name in FQDN format.
 $AZDC1="HUBWDC1" #DC1 in Azure
 $AZDC2="HUBWDC2" #DC2 in Azure
 $CFZ="blob.core.windows.net"
@@ -69,7 +69,7 @@ Add-DnsServerConditionalForwarderZone -ComputerName $AZDC1 `
 -MasterServers 168.63.129.16
 ```
 
-4. Register additional domain controller (HUBWDC2) to be part of the same DNS application partition (AzureDNS). In case you have additional Azure domain controllers you can re-run same command by specifying its name.
+4. Register additional domain controller (HUBWDC2) to be part of the same DNS application partition (AzureDNS.contoso.corp). In case you have additional Azure domain controllers you can re-run same command by specifying its name.
 
 ```powershell
 Register-DnsServerDirectoryPartition -Name $AZDNSADPartition -ComputerName $AZDC2
@@ -112,7 +112,7 @@ Here are the steps to deploy this on On-Premises DCs hosting conditional forward
 1. Define Powershell variables
 
 ```Powershell
-$OPDNSADPartition="OnPremDNS" #Name of the AD Application Partition
+$OPDNSADPartition="OnPremDNS.contoso.corp" #Name of the AD Application Partition - replace with your name in FQDN format.
 $OPDC1="ONPREMDC1" #DC1 On-Premises
 $OPDC2="ONPREMDC2" #DC2 in Azure
 $CFZ="blob.core.windows.net"
@@ -134,7 +134,7 @@ Add-DnsServerConditionalForwarderZone -ComputerName $OPDC1 `
 -MasterServers 10.0.1.10,10.0.1.11
  ```
 
-4. Register additional domain controller (ONPREMDC2) to be part of the same DNS application partition (OnPremDNS). In case you have additional On-prem domain controllers you can re-run same command by specifying its name.
+4. Register additional domain controller (ONPREMDC2) to be part of the same DNS application partition (OnPremDNS.contoso.corp). In case you have additional On-prem domain controllers you can re-run same command by specifying its name.
 
 ```powershell
 Register-DnsServerDirectoryPartition -Name $OPDNSADPartition -ComputerName $OPDC2
