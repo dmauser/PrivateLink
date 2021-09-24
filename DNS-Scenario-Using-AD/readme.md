@@ -114,7 +114,7 @@ Here are the steps to deploy this on On-Premises DCs hosting conditional forward
 ```Powershell
 $OPDNSADPartition="OnPremDNS.contoso.corp" #Name of the AD Application Partition - replace with your name in FQDN format.
 $OPDC1="ONPREMDC1" #DC1 On-Premises
-$OPDC2="ONPREMDC2" #DC2 in Azure
+$OPDC2="ONPREMDC2" #DC2 On-Premises
 $CFZ="blob.core.windows.net"
 ```
 
