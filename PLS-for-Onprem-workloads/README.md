@@ -41,11 +41,12 @@ _Download a Visio [file](./PLS-on-prem-workloads.vsdx) of this architecture and 
 
 There are some important benefits of this solution as well as some requirements to make this solution work properly. First, here are some benefits of using Private Link Service to publish On-premises workloads:
 
-1. It works for **TCP and UDP** protocols.
-2. Provider and consumer can have **overlapping IPs** (as shown on the architecture diagram all parties have the same IP scheme).
-3. Application is privately published over Azure (requires all parties have Azure Subscriptions). **Remove the need to build and manage complex VPN connections** that are commonly used on this type of consumer/provider interconnection.
-4. **There are not constraints of the presence of the provider and consumer over the Azure regions** (on the diagram above the provider is on Azure US Central, while consumers Customer A and Customer B are in different Azure regions, Azure East US on West US respectively).
-5. **Provider's published on-premises workload** via PLS **can also be accessible** not just from the customers' Azure networks via Private Endpoint but also **from their on-premises networks** either by VPN or ExpressRoute connection.
+1. Provider and consumer can be in **different subscriptions/tenants**.
+2. It works for **TCP and UDP** protocols.
+3. Provider and consumer can have **overlapping IPs** (as shown on the architecture diagram all parties have the same IP scheme).
+4. Application is privately published over Azure (requires all parties have Azure Subscriptions). **Remove the need to build and manage complex VPN connections** that are commonly used on this type of consumer/provider interconnection.
+5. **There are not constraints of the presence of the provider and consumer over the Azure regions** (on the diagram above the provider is on Azure US Central, while consumers Customer A and Customer B are in different Azure regions, Azure East US on West US respectively).
+6. **Provider's published on-premises workload** via PLS **can also be accessible** not just from the customers' Azure networks via Private Endpoint but also **from their on-premises networks** either by VPN or ExpressRoute connection.
 
 Second, here is a breakdown of requirements from Providers and Consumers:
 
