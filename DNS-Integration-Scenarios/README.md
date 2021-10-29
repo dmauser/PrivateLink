@@ -221,10 +221,10 @@ The final key scenario to consider is how can an On-Premises DNS server can be p
   **Cons**:
     - All name resolution to PaaS Services will use this Conditional Forwarder and they will be redirected to Custom DNS server in Azure.
 
-- **Solution 2** - Conditional Forwarder to Specific PaaS service FQDN using Private Endpoint pointing to custom DNS IP in Azure.
+- **Solution 2** - Conditional Forwarder to Specific PaaS Private Link service FQDN using Private Endpoint pointing to custom DNS IP in Azure.
 
   Example: 
-  Conditional Forwarder to: gbbstg1.blob.core.windows.net
+  Conditional Forwarder to: gbbstg1.privatelink.blob.core.windows.net
   Pointing to IP: 10.0.0.10 (IP of Azure Custom DNS server).
 
   **Note**: You can add multiple destination IPs for the same Conditional Forwarder Zone for redundancy. Specifying a secondary Azure DNS Server IP, for example.
