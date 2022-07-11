@@ -11,6 +11,7 @@
 [Solution](#Solution)
 
 ## Introduction
+
 In this post we are going on details on how to make Private Endpoint DNS name resolution work properly over point to site (P2S) VPN connections using Azure Virtual Network VPN Gateway or Virtual WAN VPN Gateway.
 
 ## Assumptions and requirements
