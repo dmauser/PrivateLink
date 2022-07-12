@@ -192,26 +192,30 @@ Below on 4.1 we are going to explore the Azure Private Resolver which is a DNS S
 
 ### 4.1 Azure DNS Private Resolver (Preview)
 
-Azure DNS Private Resolver is the newer first party offering to help customers to integrate better DNS resolution from On-premises to Azure, like facilitate integration from an On-premises DNS server to resolve domains hosted in Azure Private DNS zones like private link zones (privatelink.blog.core.windows) which is the scope of this article as well as allows Azure resources to resolve DNS names hosted On-premises.
+Azure DNS Private Resolver is the newer first-party offering to help customers to integrate better DNS resolution from On-premises to Azure, like facilitating integration from an On-premises DNS server to resolve domains hosted in Azure Private DNS zones like private link zones (privatelink.blob.core.windows.net) which is the scope of this article as well as allows Azure resources to resolve DNS domain names hosted On-premises. Check out [What is Azure DNS Private Resolver?
+](https://docs.microsoft.com/en-us/azure/dns/dns-private-resolver-overview) for more information.
 
 ![](./media/dnsprivate-resolver.png)
 
-Above you can see the process of integration of Azure DNS Private resolver.
+In the illustration above you can see the process of integration of Azure DNS Private resolver.
+
 1. Client (172.16.0.100) sends a DNS query to gbbstg1.blob.core.windows.net
 2. On-premises Windows DNS Server receives the query and process towards Azure (DNS Private resolver at 10.0.0.10) by leveraging the Conditional Forward zone: blob.core.windows.net.
-3. DNS Private Resolver process the query and sends it to Azure Provided DNS. 
-4. Because we have a public domain zone that query will be processed first by the Azure Public DNS which is authoritative to blob.core.windows.net. 
-5. Because gbbstg1 storage account has private link integrated and CNAME gbbstg1.private.link.blob.core.windows will be the response.
-6. Azure Private DNS zone is linked to the VNET1 and it will receive the query for the zone private.link.blob.core.windows.net 
-7. That query will be process for the existing mapping A (host) record for gbbstg1.private.link.blob.core.windows.net mapped to the IP 10.0.0.5 and returned to the Azure Provided DNS.
-8. That response is returned to the DNS Private Resolver.
-9. And then will be forwarded back to the On-premises Windows DNS Server.
-10. On-premises WindowsDNS Server will than return the final response to the Client.
-11. Now the client has the proper private IP address associated and it will access the private endpoint 10.0.0.5 associated to the gbbstg1 storage account.
+3. DNS Private Resolver processes the query and sends it to Azure Provided DNS.
+4. Because we have a public domain zone that query will be processed first by the Azure Public DNS which is authoritative to blob.core.windows.net.
+5. Gbbstg1 storage account has private link integrated and CNAME gbbstg1.private.link.blob.core.windows will be the response for that query.
+6. Azure Private DNS zone is linked to the VNET1 and it will receive the query for the zone private.link.blob.core.windows.net
+7. The query will be processed for the existing mapping A (host) record for gbbstg1.private.link.blob.core.windows.net mapped to the IP 10.0.0.5 and returned to the Azure Provided DNS.
+8. The response is returned to the DNS Private Resolver.
+9. And then it will be forwarded back to the On-premises Windows DNS Server.
+10. On-premises WindowsDNS Server will then return the final response to the Client.
+11. Now the client has the private endpoint IP address (10.0.0.5) and will access the target gbbstg1 storage account.
+
+:point_right: **Tip:** If you want to get hands-on on the new Azure DNS Private Resolver and its capabilities take a look on the [Azure DNS Private Resolver - MicroHack](https://github.com/dawlysd/azure-dns-private-resolver-microhack) 
 
 ### 4.2 Custom DNS Server
 
-On this scenario customer wants or has already a DNS Proxy or Forwarder solution in Azure. For example, that solution can be an Active Directory Domain Controller, Azure Active Dirctory Domain Services (AADDS), a 3rd party solution like Infoblox or Firewall host DNS solution like Azure Firewall and others like a NGINX DNS proxy forwarder ([Deploy VMSS of a NGINX DNS Proxy into an existing Virtual Network](https://github.com/Microsoft/PL-DNS-Proxy).)
+In a scenario that customer wants or has already a DNS Proxy or Forwarder solution in Azure. For example, that solution can be an Active Directory Domain Controller, Azure Active Directory Domain Services (AADDS), a 3rd party solution like Infoblox or a Firewall that host DNS feature like Azure Firewall (DNS Proxy) and others like a NGINX DNS proxy forwarder as shown in ([Deploy VMSS of a NGINX DNS Proxy into an existing Virtual Network](https://github.com/Microsoft/PL-DNS-Proxy).)
 
 ![](./media/image15.png)
 
@@ -219,7 +223,7 @@ In case you have Custom DNS solution, you need to setup conditional forwarders o
 
 As mentioned in the previous section when Custom DNS server are pointing to other DNS Servers as forwarders, similar name resolution challenges are going to be faced when dealing with On-premises DNS Servers to resolve Private Endpoints records stored in Azure Private DNZ Zone. Most of those challenges can be easily resolved by having your OnPrem DNS Server to use conditional forwarder for original PaaS name, example: blob.core.windows.net.  On next section, _Architecture Design Example_, there is a diagram that details name resolution flow from a OnPrem computer using OnPrem DNS Server with that setup (conditional forwarder to **blob.core.windows.net** ) pointing to the IP of Azure Custom DNS Server, and finally getting Azure Private DNS zone properly resolved when query is sent to 168.63.129.16. Also, on the same diagram you will see that Azure Custom DNS Server does not have to be located on the same VNET and where Private Endpoint exists but its VNET has to be linked to the same Azure DNS Private DNS Zone in order to process the name resolution properly.
 
-### 4.3 On-premises DNS Server conditional forwarder considerations?
+### 4.3 On-premises DNS Server conditional forwarder considerations
 
 **Note**: _the behavior explained in this section has been observed over Windows DNS Server only. There are reports that BIND-based DNS Servers (including Infoblox) work using conditional forwarders towards the privatelink.PaaS-domain zone (example: privatelink.blob.core.windows.net for storage accounts) without any issues. Therefore, please validate in your environment before deciding between adding the privatelink .PaaS-domain zone (privatelink.blob.core.windows.net as an example for storage accounts) or the default PaaS zone (blob.core.windows.net). More details about this behavior to be added soon to this article._
 
@@ -282,11 +286,11 @@ The final key scenario to consider is how can an On-Premises DNS server can be p
 
 Here is sample design on how to integrate OnPrem DNS as well as Azure DNS resolution to PaaS Services and obtain Private Endpoint IP.
 
-**Note:** The diagram illustrated on this section is just an example and not necessary applicable for your scenario. Therefore, extra adjustments might be necessary based on your requirements. Please check [Private Link resources repo](https://github.com/dmauser/PrivateLink) for other specific articles and design patterns.
+>**Note:** The diagram illustrated in this section is just an example and is not necessarily applicable to your scenario. Therefore, extra adjustments may be necessary based on your requirements. Please check [Private Link resources repo](https://github.com/dmauser/PrivateLink) for other specific articles and design patterns.
 
 On the diagram below we have Contoso corporation which has Private Endpoint resource spread across multiple Spoke VNETs (SPK1 and SPK2 on West US region and SPK3 and SPK4 VNETs on East US region). Because Private Endpoints exist on each one of the Spoke VNETs, Contoso has leveraged Azure Private DNS (Global Resource) and linked each one of the VNETs to Azure Private DNS. All Private Endpoints records have been successfully registered under privatelink.blob.core.windows.net and to allow name resolution for each Private endpoint resolve correctly.
 
-**Note: (Azure Private DNS Resolver)** You can replace Custom DNS servers listed below with Azure DNS Private resolver and private link resolution will work in the same way when integrating with On-premises.
+>**Note: (Azure Private DNS Resolver)** You can replace Custom DNS servers listed below with Azure DNS Private resolver and expect the private link resolution works in the same way when integrating with On-premises.
 
 ![](./media/image17.png)
 
@@ -314,13 +318,15 @@ Other relevant resources can be found in [Private Link/Endpoint DNS Integration 
 
 To clarify better on how PaaS service DNS name resolution works when dealing with private endpoint works the following command _Resolve-DnsName_ can provide good details. In this section, storage account name: _gbbstg1.blob.core.windows.net_. will be used as an example:
 
+```
 Resolve-DnsName -Name gbbstg1.blob.core.windows.net
+```
 
 **Note:** Other tools such as DIG (Linux) or Nslookup (set debug) can accomplish the same exact task. Consider them as alternative for Powershell _Resolve-DnsName_ command.
 
 ### 7.1. Before Private Endpoint
 
-First example shows resolution behavior before expose Storage Account gbbstg1 to Private Endpoint which is expected resolution in the same way for any PaaS Service following those lines. 
+First example shows resolution behavior before expose Storage Account gbbstg1 to Private Endpoint which is expected resolution in the same way for any PaaS Service following those lines.
 
 ![](./media/image18.png)
 
@@ -382,4 +388,6 @@ Here are few steps to resolve DNS issues when integrating private endpoint with 
 
 5. When executing tools like _DIG_ (Linux), _nslookup_ (Windows and Linux) or _Resolve-DnsName_ (Powershell) account for local operational system DNS cache after a DNS server configuration has been changed. On Windows you can flush local cache by running **ipconfig /flushdns**. Another alternative when using commands like Resolve-DnsName you can use -DNSonly to bypass local cache, for example:
 
-    **Resolve-DnsName -Name gbbstg1.blob.core.windows.net -DnsOnly**
+```
+Resolve-DnsName -Name gbbstg1.blob.core.windows.net -DnsOnly
+```
