@@ -211,7 +211,7 @@ In the illustration above you can see the process of integration of Azure DNS Pr
 10. On-premises WindowsDNS Server will then return the final response to the Client.
 11. Now the client has the private endpoint IP address (10.0.0.5) and will access the target gbbstg1 storage account.
 
-:point_right: **Tip:** If you want to get hands-on on the new Azure DNS Private Resolver and its capabilities take a look on the [Azure DNS Private Resolver - MicroHack](https://github.com/dawlysd/azure-dns-private-resolver-microhack) 
+:point_right: **Tip:** If you want to get hands-on on the new Azure DNS Private Resolver and its capabilities take a look at [Azure DNS Private Resolver - MicroHack](https://github.com/dawlysd/azure-dns-private-resolver-microhack)
 
 ### 4.2 Custom DNS Server
 
