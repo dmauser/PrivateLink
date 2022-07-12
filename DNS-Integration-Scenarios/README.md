@@ -22,7 +22,11 @@ Table of Contents
 
 4. [On-Premises DNS integration](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#4-on-premises-dns-integration)
 
-    4.1. [Which conditional forwarder zone should be used?](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#41-which-conditional-forwarder-zone-should-be-used)
+    4.1. [Azure DNS Private Resolver - Preview](#41-azure-dns-private-resolver-preview)
+
+    4.2. [Custom DNS Server](#42-custom-dns-server)
+
+    4.3. [On-premises DNS Server conditional forwarder considerations](#43-on-premises-dns-server-conditional-forwarder-considerations)
 
 5. [Architecture Design Example](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#5-architecture-design-example)
 
@@ -182,16 +186,40 @@ Another custom DNS scenario to consider is when a Forwarder or Root hints have a
 
 ## 4. On-Premises DNS integration
 
-The first challenge when trying to resolve Private Endpoints from On-premises networks, when leveraging Azure Private DNS Zones, is how to retrieve the Private Endpoint IP via 168.63.129.16 (this IP is not reachable from On-premises networks). Today this integration requires use of a Custom DNS Servers deployed in Azure VNET and have On-premises DNS Servers send requests to them. It's important that On-premises DNS Servers are configured correctly to forward the appropriate requests to the Custom DNS server in Azure and there are multiple ways to do that and we will explore them in more details later in this section.
+Until recently the only way to reach Private DNS Zones hosting Private Link zones from On-premises DNS server were leveraging a custom DNS Server acting as proxy or forwarder in Azure. The main reason for that behavior is Azure Private DNS zones that host private link zone are only reacheable using 168.63.129.16 ([What is IP address 168.63.129.16?](https://docs.microsoft.com/en-us/azure/virtual-network/what-is-ip-address-168-63-129-16)) but only Azure resources such as Virtual Machines or PaaS services are the only Azure components that can reach that IP. The main downside of this approach customer had to deploy or uses their existing IaaS VM with DNS role to act as proxy/forwarder and point the On-premises DNS server to that proxy/forwarder and from it access Azure Private DNS zones hosting Private Link zones using the IP 168.63.129.16.
 
-In case you have Custom DNS already in Azure you just need to setup conditional forwarders on your OnPrem DNS server pointing to it. In case you don't have a Custom DNS VM in Azure you can deploy the VMSS ScaleSet that includes Nginx already configured to forward DNS requests to Azure Provided DNS IP 168.63.129.16. See:  [Deploy VMSS of a NGINX DNS Proxy into an existing Virtual Network](https://github.com/Microsoft/PL-DNS-Proxy).
+Below on 4.1 we are going to explore the Azure Private Resolver which is a DNS Server first party solution to allow better integration with Azure Private DNS Zones. At the same time it is important to note that Customer DNS Server is still an valid option which will be covered on 4.2 section below.
 
-As mentioned in the previous section when Custom DNS server are pointing to other DNS Servers as forwarders, similar name resolution challenges are going to be faced when dealing with On-premises DNS Servers to resolve Private Endpoints records stored in Azure Private DNZ Zone. Most of those challenges can be easily resolved by having your OnPrem DNS Server to use conditional forwarder for original PaaS name, example: blob.core.windows.net.  On next section, _Architecture Design Example_, there is a diagram that details name resolution flow from a OnPrem computer using OnPrem DNS Server with that setup (conditional forwarder to **blob.core.windows.net** ) pointing to the IP of Azure Custom DNS Server, and finally getting Azure Private DNS zone properly resolved when query is sent to 168.63.129.16. Also, on the same diagram you will see that Azure Custom DNS Server does not have to be located on the same VNET and where Private Endpoint exists but its VNET has to be linked to the same Azure DNS Private DNS Zone in order to process the name resolution properly.
+### 4.1 Azure DNS Private Resolver (Preview)
+
+Azure DNS Private Resolver is the newer first party offering to help customers to integrate better DNS resolution from On-premises to Azure, like facilitate integration from an On-premises DNS server to resolve domains hosted in Azure Private DNS zones like private link zones (privatelink.blog.core.windows) which is the scope of this article as well as allows Azure resources to resolve DNS names hosted On-premises.
+
+![](./media/dnsprivate-resolver.png)
+
+Above you can see the process of integration of Azure DNS Private resolver.
+1. Client (172.16.0.100) sends a DNS query to gbbstg1.blob.core.windows.net
+2. On-premises Windows DNS Server receives the query and process towards Azure (DNS Private resolver at 10.0.0.10) by leveraging the Conditional Forward zone: blob.core.windows.net.
+3. DNS Private Resolver process the query and sends it to Azure Provided DNS. 
+4. Because we have a public domain zone that query will be processed first by the Azure Public DNS which is authoritative to blob.core.windows.net. 
+5. Because gbbstg1 storage account has private link integrated and CNAME gbbstg1.private.link.blob.core.windows will be the response.
+6. Azure Private DNS zone is linked to the VNET1 and it will receive the query for the zone private.link.blob.core.windows.net 
+7. That query will be process for the existing mapping A (host) record for gbbstg1.private.link.blob.core.windows.net mapped to the IP 10.0.0.5 and returned to the Azure Provided DNS.
+8. That response is returned to the DNS Private Resolver.
+9. And then will be forwarded back to the On-premises Windows DNS Server.
+10. On-premises WindowsDNS Server will than return the final response to the Client.
+11. Now the client has the proper private IP address associated and it will access the private endpoint 10.0.0.5 associated to the gbbstg1 storage account.
+
+### 4.2 Custom DNS Server
+
+On this scenario customer wants or has already a DNS Proxy or Forwarder solution in Azure. For example, that solution can be an Active Directory Domain Controller, Azure Active Dirctory Domain Services (AADDS), a 3rd party solution like Infoblox or Firewall host DNS solution like Azure Firewall and others like a NGINX DNS proxy forwarder ([Deploy VMSS of a NGINX DNS Proxy into an existing Virtual Network](https://github.com/Microsoft/PL-DNS-Proxy).)
 
 ![](./media/image15.png)
 
+In case you have Custom DNS solution, you need to setup conditional forwarders on your OnPrem DNS server pointing to it.
 
-### 4.1 Which conditional forwarder zone should be used?
+As mentioned in the previous section when Custom DNS server are pointing to other DNS Servers as forwarders, similar name resolution challenges are going to be faced when dealing with On-premises DNS Servers to resolve Private Endpoints records stored in Azure Private DNZ Zone. Most of those challenges can be easily resolved by having your OnPrem DNS Server to use conditional forwarder for original PaaS name, example: blob.core.windows.net.  On next section, _Architecture Design Example_, there is a diagram that details name resolution flow from a OnPrem computer using OnPrem DNS Server with that setup (conditional forwarder to **blob.core.windows.net** ) pointing to the IP of Azure Custom DNS Server, and finally getting Azure Private DNS zone properly resolved when query is sent to 168.63.129.16. Also, on the same diagram you will see that Azure Custom DNS Server does not have to be located on the same VNET and where Private Endpoint exists but its VNET has to be linked to the same Azure DNS Private DNS Zone in order to process the name resolution properly.
+
+### 4.3 On-premises DNS Server conditional forwarder considerations?
 
 **Note**: _the behavior explained in this section has been observed over Windows DNS Server only. There are reports that BIND-based DNS Servers (including Infoblox) work using conditional forwarders towards the privatelink.PaaS-domain zone (example: privatelink.blob.core.windows.net for storage accounts) without any issues. Therefore, please validate in your environment before deciding between adding the privatelink .PaaS-domain zone (privatelink.blob.core.windows.net as an example for storage accounts) or the default PaaS zone (blob.core.windows.net). More details about this behavior to be added soon to this article._
 
@@ -254,7 +282,11 @@ The final key scenario to consider is how can an On-Premises DNS server can be p
 
 Here is sample design on how to integrate OnPrem DNS as well as Azure DNS resolution to PaaS Services and obtain Private Endpoint IP.
 
+**Note:** The diagram illustrated on this section is just an example and not necessary applicable for your scenario. Therefore, extra adjustments might be necessary based on your requirements. Please check [Private Link resources repo](https://github.com/dmauser/PrivateLink) for other specific articles and design patterns.
+
 On the diagram below we have Contoso corporation which has Private Endpoint resource spread across multiple Spoke VNETs (SPK1 and SPK2 on West US region and SPK3 and SPK4 VNETs on East US region). Because Private Endpoints exist on each one of the Spoke VNETs, Contoso has leveraged Azure Private DNS (Global Resource) and linked each one of the VNETs to Azure Private DNS. All Private Endpoints records have been successfully registered under privatelink.blob.core.windows.net and to allow name resolution for each Private endpoint resolve correctly.
+
+**Note: (Azure Private DNS Resolver)** You can replace Custom DNS servers listed below with Azure DNS Private resolver and private link resolution will work in the same way when integrating with On-premises.
 
 ![](./media/image17.png)
 
