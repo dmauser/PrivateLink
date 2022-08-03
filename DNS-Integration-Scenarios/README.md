@@ -4,23 +4,23 @@ Private Endpoint DNS Integration Scenarios
 Table of Contents
 =================
 
-1. [Introduction](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#1-introduction)
+1. [Introduction](#1-introduction)
 
-2. [How DNS resolution works before and after Private Endpoints](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#2-how-dns-resolution-works-before-and-after-private-endpoints)
+2. [How DNS resolution works before and after Private Endpoints](#2-how-dns-resolution-works-before-and-after-private-endpoints)
 
-    2.1. [Before Private Endpoint](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#21-before-private-endpoint)
+    2.1. [Before Private Endpoint](#21-before-private-endpoint)
 
-    2.2. [After Private Endpoint](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#22-after-private-endpoint)
+    2.2. [After Private Endpoint](#22-after-private-endpoint)
 
-3. [Azure Virtual Network DNS integration](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#3-azure-virtual-network-dns-integration)
+3. [Azure Virtual Network DNS integration](#3-azure-virtual-network-dns-integration)
 
-    3.1. [Private DNS resolution within the VNET](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#31-private-dns-resolution-within-the-vnet)
+    3.1. [Private DNS resolution within the VNET](#31-private-dns-resolution-within-the-vnet)
 
-    3.2. [Private DNS resolution between VNETs](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#32-private-dns-resolution-between-vnets)
+    3.2. [Private DNS resolution between VNETs](#32-private-dns-resolution-between-vnets)
 
-    3.3. [Private DNS resolution with Custom DNS inside the VNET](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#33-private-dns-resolution-with-custom-dns-inside-the-vnet)
+    3.3. [Private DNS resolution with Custom DNS inside the VNET](#33-private-dns-resolution-with-custom-dns-inside-the-vnet)
 
-4. [On-Premises DNS integration](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#4-on-premises-dns-integration)
+4. [On-Premises DNS integration](#4-on-premises-dns-integration)
 
     4.1. [Azure DNS Private Resolver - Preview](#41-azure-dns-private-resolver-preview)
 
@@ -28,21 +28,21 @@ Table of Contents
 
     4.3. [On-premises DNS Server conditional forwarder considerations](#43-on-premises-dns-server-conditional-forwarder-considerations)
 
-5. [Architecture Design Example](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#5-architecture-design-example)
+5. [Architecture Design Example](#5-architecture-design-example)
 
-6. [Conclusion](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#6-conclusion)
+6. [Conclusion](#6-conclusion)
 
-7. [Appendix A - Validating DNS resolution](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#7-appendix-a---validating-dns-resolution)
+7. [Appendix A - Validating DNS resolution](#7-appendix-a---validating-dns-resolution)
 
-    7.1. [Before Private Endpoint](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#71-before-private-endpoint)
+    7.1. [Before Private Endpoint](#71-before-private-endpoint)
 
-    7.2. [After Private Endpoint (External Name Resolution)](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#72-after-private-endpoint-external-name-resolution)
+    7.2. [After Private Endpoint (External Name Resolution)](#72-after-private-endpoint-external-name-resolution)
 
-    7.3. [After Private Endpoint (Internal Name Resolution)](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#73-after-private-endpoint-internal-name-resolution)
+    7.3. [After Private Endpoint (Internal Name Resolution)](#73-after-private-endpoint-internal-name-resolution)
 
-    7.4. [Server Name Indication (SNI) on TLS Request (Client Hello)](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#74-server-name-indication-sni-on-tls-request-client-hello)
+    7.4. [Server Name Indication (SNI) on TLS Request (Client Hello)](#74-server-name-indication-sni-on-tls-request-client-hello)
 
-8. [Appendix B - Troubleshooting](https://github.com/dmauser/PrivateLink/tree/master/DNS-Integration-Scenarios#8-appendix-b---troubleshooting)
+8. [Appendix B - Troubleshooting](#8-appendix-b---troubleshooting)
 
 ## 1. Introduction
 
