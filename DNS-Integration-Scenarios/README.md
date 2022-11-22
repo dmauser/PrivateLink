@@ -22,7 +22,7 @@ Table of Contents
 
 4. [On-Premises DNS integration](#4-on-premises-dns-integration)
 
-    4.1. [Azure DNS Private Resolver - Preview](#41-azure-dns-private-resolver-preview)
+    4.1. [Azure DNS Private Resolver](#41-azure-dns-private-resolver)
 
     4.2. [Custom DNS Server](#42-custom-dns-server)
 
@@ -190,7 +190,7 @@ Until recently the only way to reach Private DNS Zones hosting Private Link zone
 
 Below on 4.1 we are going to explore the Azure Private Resolver which is a DNS Server first party solution to allow better integration with Azure Private DNS Zones. At the same time it is important to note that Customer DNS Server is still an valid option which will be covered on 4.2 section below.
 
-### 4.1 Azure DNS Private Resolver (Preview)
+### 4.1 Azure DNS Private Resolver
 
 Azure DNS Private Resolver is the newer first-party offering to help customers to integrate better DNS resolution from On-premises to Azure, like facilitating integration from an On-premises DNS server to resolve domains hosted in Azure Private DNS zones like private link zones (privatelink.blob.core.windows.net) which is the scope of this article as well as allows Azure resources to resolve DNS domain names hosted On-premises. Check out [What is Azure DNS Private Resolver?
 ](https://docs.microsoft.com/en-us/azure/dns/dns-private-resolver-overview) for more information.
