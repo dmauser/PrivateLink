@@ -1,10 +1,11 @@
 ## Known Issue
 Azure Customers are unable to access each other PaaS Resources when both sides are exposed to PrivateLink/Endpoint.
 
-**Note:** The article below covers the options to resolve the problem before Microsoft published a new feature that is now the recommended approach. Please refer to:
-[Fallback to internet for Azure Private DNS zones](https://learn.microsoft.com/en-us/azure/dns/private-dns-fallback) 
-
-Also, for additional reference, consult Jose Moreno's blog post [Private Link reality bites: NXDomainRedirect](https://blog.cloudtrooper.net/2025/02/11/private-link-reality-bites-nxdomainredirect/) with a good illustration on how that new feature works.
+>**Note:** The article below covers the options to resolve the problem before Microsoft published a new feature that is now the recommended approach. Please refer to:
+>
+>[Fallback to internet for Azure Private DNS zones](https://learn.microsoft.com/en-us/azure/dns/private-dns-fallback) 
+>
+>Also, for additional reference, consult Jose Moreno's blog post [Private Link reality bites: NXDomainRedirect](https://blog.cloudtrooper.net/2025/02/11/private-link-reality-bites-nxdomainredirect/) with a good illustration on how that new feature works.
 
 ## Scenario A
 
